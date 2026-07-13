@@ -72,6 +72,7 @@ generateBtn.addEventListener("click", async () => {
       : "Tidak ada saran jadwal.";
 
     resultSection.classList.remove("hidden");
+    resultSection.classList.add("flex");
     generateStatus.textContent = "Konten berhasil dibuat. Silakan review & edit sebelum disetujui.";
     generateStatus.className = "text-sm text-emerald-400";
   } catch (err) {
@@ -211,6 +212,7 @@ loadSentimentBtn.addEventListener("click", async () => {
     });
 
     sentimentDashboard.classList.remove("hidden");
+    sentimentDashboard.classList.add("flex");
     sentimentStatus.textContent = "Analisis selesai.";
     sentimentStatus.className = "text-sm text-emerald-400";
   } catch (err) {

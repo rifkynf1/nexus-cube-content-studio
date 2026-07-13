@@ -98,11 +98,11 @@
             <!-- Dropdown Dataset -->
             <div class="mb-3">
               <select id="datasetSelect" class="w-full bg-black/40 border border-cyan-900/50 rounded p-2 text-gray-300 font-sans text-[10px] focus:ring-1 focus:ring-cyber-cyan focus:border-cyber-cyan outline-none transition-colors">
-                <option value="comments_dataset.csv">Data: Turnamen Esports (Default)</option>
-                <option value="comments_event_offline.csv">Data: Event Offline (Exhibition)</option>
-                <option value="upload">📁 Upload File CSV Sendiri...</option>
+                <option value="comments_dataset.csv">Data: Turnamen Esports</option>
+                <option value="comments_event_offline.csv">Data: Event Offline</option>
+                <option value="upload">📁 Upload File CSV...</option>
               </select>
-              <input type="file" id="customCsvFile" accept=".csv" class="hidden mt-2 w-full text-[9px] text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[9px] file:font-semibold file:bg-cyber-cyan/20 file:text-cyber-cyan hover:file:bg-cyber-cyan/30" />
+              <input type="file" id="customCsvFile" accept=".csv" class="hidden mt-2 w-full text-[11px] text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-bold file:bg-cyber-cyan/20 file:text-cyber-cyan hover:file:bg-cyber-cyan/30 cursor-pointer file:cursor-pointer transition-colors" />
             </div>
 
             <!-- Tombol load dipindah ke sidebar, tapi ID tetap dipertahankan agar app.js berfungsi -->
@@ -162,7 +162,7 @@
             <div class="h-[1px] flex-1 bg-cyan-900/30"></div>
           </div>
 
-          <div class="grid lg:grid-cols-2 gap-6">
+          <div class="grid lg:grid-cols-2 gap-6 mt-6">
             <!-- WA -->
             <div class="flex flex-col bg-cyber-navy/30 rounded-xl border border-emerald-500/20 overflow-hidden shadow-lg transition-transform hover:-translate-y-1">
               <div class="px-4 py-3 border-b border-emerald-900/30 bg-emerald-900/10 flex justify-between items-center">
@@ -225,7 +225,7 @@
           </div>
 
           <!-- Calendar Suggester -->
-          <div class="bg-cyber-navy/30 border border-cyber-fuchsia/30 rounded-xl p-5 flex flex-col md:flex-row md:items-center gap-4 transition-all duration-300 hover:border-cyber-fuchsia/50 hover:shadow-neon-fuchsia">
+          <div class="bg-cyber-navy/30 border border-cyber-fuchsia/30 rounded-xl p-5 flex flex-col md:flex-row md:items-center gap-4 mt-6 transition-all duration-300 hover:border-cyber-fuchsia/50 hover:shadow-neon-fuchsia">
             <span class="font-cyber text-xs font-bold uppercase tracking-widest text-cyber-fuchsia whitespace-nowrap">📅 JADWAL DISARANKAN</span>
             <div id="calendarSuggestion" class="text-sm font-rajdhani text-gray-300"></div>
           </div>
@@ -245,7 +245,7 @@
             <div class="h-[1px] flex-1 bg-cyan-900/30"></div>
           </div>
 
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
             <div class="bg-cyber-navy/30 border border-gray-800 rounded-xl p-5 text-center transition-colors hover:bg-cyber-navy/50 flex flex-col justify-center">
               <div class="font-cyber text-3xl font-bold text-white" id="statTotal">-</div>
               <div class="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-2">Total Komentar</div>
@@ -268,7 +268,7 @@
             </div>
           </div>
 
-          <div class="grid md:grid-cols-3 gap-6">
+          <div class="grid md:grid-cols-3 gap-6 mt-6">
             <div class="col-span-1 bg-cyber-navy/30 border border-cyan-900/30 rounded-xl p-5 flex flex-col h-[400px]">
               <h3 class="font-cyber text-xs tracking-widest text-cyber-cyan font-bold mb-4 flex-shrink-0">TEMA UTAMA</h3>
               <div id="themeList" class="space-y-3 font-rajdhani text-sm overflow-y-auto pr-2 custom-scrollbar"></div>
