@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Kinetik Arena // Content Studio</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Inter:wght@300;400;600&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'cyber-dark': '#050a14',
+            'cyber-navy': '#0a111e',
+            'cyber-cyan': '#00f0ff',
+            'cyber-cyan-muted': 'rgba(0, 240, 255, 0.1)',
+            'cyber-fuchsia': '#d946ef',
+            'cyber-emerald': '#10b981',
+            'cyber-indigo': '#6366f1',
+          },
+          fontFamily: {
+            'cyber': ['Orbitron', 'sans-serif'],
+            'sans': ['Inter', 'sans-serif'],
+            'rajdhani': ['Rajdhani', 'sans-serif'],
+          },
+          boxShadow: {
+            'neon-cyan': '0 0 15px rgba(0, 240, 255, 0.4)',
+            'neon-cyan-sm': '0 0 8px rgba(0, 240, 255, 0.3)',
+            'neon-fuchsia': '0 0 15px rgba(217, 70, 239, 0.4)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #050a14;
+      color: #e2e8f0;
+      overflow-x: hidden;
+    }
+    .glow-text-cyan { text-shadow: 0 0 10px rgba(0, 240, 255, 0.6); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #050a14; }
+    ::-webkit-scrollbar-thumb { background: #0a111e; border: 1px solid rgba(0, 240, 255, 0.2); }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+  <div class="flex flex-col md:flex-row flex-1 overflow-hidden h-screen relative">
+    
+    <!-- MOBILE HEADER -->
+    <div class="md:hidden flex items-center p-4 bg-cyber-dark border-b border-cyan-900/50 z-30 gap-4">
+      <button id="mobileMenuBtn" class="text-cyber-cyan focus:outline-none hover:text-white transition-colors">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 bg-cyber-cyan shadow-neon-cyan rounded-sm rotate-45 flex items-center justify-center overflow-hidden">
+          <div class="w-full h-full bg-cyber-dark rotate-[-45deg] scale-75"></div>
+        </div>
+        <span class="font-cyber text-sm tracking-widest text-cyber-cyan font-bold">KINETIK</span>
+      </div>
+    </div>
+
+    <!-- SIDEBAR BACKDROP -->
+    <div id="sidebarBackdrop" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 w-72 bg-cyber-dark border-r border-cyan-900/50 flex flex-col z-50 transition-transform duration-300 ease-in-out h-screen md:h-auto">
+      <div class="p-6 border-b border-cyan-900/30 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-cyber-cyan shadow-neon-cyan rounded-sm rotate-45 flex items-center justify-center overflow-hidden">
+            <div class="w-full h-full bg-cyber-dark rotate-[-45deg] scale-75"></div>
+          </div>
+          <span class="font-cyber text-sm tracking-widest text-cyber-cyan font-bold">KINETIK</span>
+        </div>
+        <button id="closeMenuBtn" class="md:hidden text-gray-400 hover:text-white focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      
+      <nav class="flex-1 p-4 space-y-6 overflow-y-auto">
+        <div>
+          <h3 class="text-[10px] uppercase tracking-widest text-gray-500 mb-4 px-2">Navigation</h3>
+          <ul class="space-y-2">
+            <li>
+              <a class="flex items-center gap-3 px-3 py-2 rounded border border-cyber-cyan/40 bg-cyber-cyan/10 text-cyber-cyan shadow-neon-cyan-sm" href="#">
+                <span class="text-sm font-medium">Content Studio</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="pt-6 border-t border-cyan-900/30">
+          <h3 class="text-[10px] uppercase tracking-widest text-gray-500 mb-4 px-2">Data Analysis</h3>
+          <div class="bg-cyber-navy/50 p-4 rounded-lg border border-cyan-900/30">
+            <h4 class="font-cyber text-[11px] text-white tracking-wider mb-4 border-b border-cyber-cyan/20 pb-2">SENTIMENT & THEME DIGEST</h4>
+            
+            <!-- Tombol load dipindah ke sidebar, tapi ID tetap dipertahankan agar app.js berfungsi -->
+            <button id="loadSentimentBtn" class="w-full bg-cyber-cyan text-black py-2 px-3 rounded text-[10px] font-bold font-cyber hover:bg-white transition-colors flex items-center justify-center gap-2 shadow-neon-cyan">
+              MUAT ANALISIS KOMENTAR
+            </button>
+            <p class="mt-3 text-[10px] text-gray-500 italic">Klik untuk memproses feedback dari komunitas Kinetik.</p>
+            
+            <!-- Status ditambahkan di bawah tombol di sidebar -->
+            <div id="sentimentStatus" class="text-[10px] mt-3 font-medium text-center"></div>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="flex-1 flex flex-col bg-cyber-dark overflow-y-auto w-full">
+      <header class="p-4 md:p-8 pb-2 md:pb-4">
+        <div class="flex flex-col">
+          <h1 class="font-cyber text-2xl md:text-4xl font-bold tracking-tighter flex flex-wrap items-center gap-2 md:gap-3">
+            <span class="text-white glow-text-cyan">KINETIK ARENA</span>
+            <span class="text-cyber-cyan opacity-60 font-light">//</span>
+            <span class="text-cyber-cyan glow-text-cyan">CONTENT STUDIO</span>
+          </h1>
+          <p class="text-[10px] md:text-xs text-gray-400 mt-2 font-medium">AI Content Studio & Brand-Voice Assistant – prototipe mahasiswa, bukan untuk production.</p>
+        </div>
+      </header>
+
+      <div class="flex-1 p-4 md:p-8 pt-4 flex flex-col gap-6">
+        
+        <!-- SECTION 1: Brief Konten (Desain Window Terminal) -->
+        <section class="flex flex-col bg-cyber-navy/30 rounded-xl border border-cyan-500/20 shadow-2xl overflow-hidden min-h-[300px]">
+          <div class="px-6 py-4 border-b border-cyan-900/30 flex justify-between items-center bg-black/20">
+            <h2 class="font-cyber text-sm tracking-[0.2em] text-cyber-cyan glow-text-cyan font-bold">BRIEF KONTEN</h2>
+            <div class="flex gap-2">
+              <span class="w-2 h-2 rounded-full bg-red-500/50"></span>
+              <span class="w-2 h-2 rounded-full bg-yellow-500/50"></span>
+              <span class="w-2 h-2 rounded-full bg-green-500/50"></span>
+            </div>
+          </div>
+          <div class="p-6 flex flex-col gap-5">
+            <textarea id="briefInput" rows="4" class="w-full bg-black/40 border border-cyan-900/50 rounded-lg p-4 md:p-6 text-gray-300 font-mono text-xs md:text-sm focus:ring-1 focus:ring-cyber-cyan focus:border-cyber-cyan outline-none resize-none placeholder-gray-600 shadow-inner transition-colors" placeholder="Contoh: Buat pengumuman War Tiket Kinetik Cup Free Fire Season 2, prize pool Rp8.000.000, match day 5-6 September 2026, slot 24 tim."></textarea>
+            <div class="flex flex-col md:flex-row md:items-center gap-4">
+              <button id="generateBtn" class="w-full md:w-auto justify-center bg-cyber-cyan text-black px-6 md:px-8 py-3 rounded font-cyber font-bold tracking-widest text-sm flex items-center gap-3 shadow-neon-cyan hover:scale-105 active:scale-95 transition-all duration-200 group disabled:opacity-50 disabled:scale-100 disabled:cursor-not-allowed">
+                <svg class="w-5 h-5 fill-current animate-pulse group-hover:scale-125 transition-transform" viewBox="0 0 20 20"><path d="M11 3V11H19L9 21V13H1L11 3Z"/></svg>
+                GENERATE KONTEN
+              </button>
+              <span id="generateStatus" class="text-sm font-rajdhani text-gray-400 text-center md:text-left"></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 2: Multi-format Result -->
+        <section id="resultSection" class="hidden flex-col gap-6 mt-4">
+          <div class="flex items-center gap-4">
+            <h2 class="font-cyber text-base md:text-lg tracking-[0.1em] text-cyber-cyan glow-text-cyan font-bold">HASIL KONTEN MULTI-FORMAT</h2>
+            <div class="h-[1px] flex-1 bg-cyan-900/30"></div>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-6">
+            <!-- WA -->
+            <div class="flex flex-col bg-cyber-navy/30 rounded-xl border border-emerald-500/20 overflow-hidden shadow-lg transition-transform hover:-translate-y-1">
+              <div class="px-4 py-3 border-b border-emerald-900/30 bg-emerald-900/10 flex justify-between items-center">
+                <span class="font-cyber text-xs tracking-widest text-emerald-400 font-bold">📱 WHATSAPP</span>
+                <span data-status="whatsapp" class="text-[10px] text-emerald-500 font-bold"></span>
+              </div>
+              <div class="p-4 flex flex-col gap-3">
+                <textarea id="editWhatsapp" rows="8" class="w-full bg-black/40 border border-emerald-900/50 rounded-lg p-4 text-gray-300 font-rajdhani text-sm focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none resize-none shadow-inner transition-colors"></textarea>
+                <div class="flex gap-2">
+                  <button data-approve="whatsapp" class="approve-btn flex-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-emerald-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
+                  <button data-copy="editWhatsapp" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Discord -->
+            <div class="flex flex-col bg-cyber-navy/30 rounded-xl border border-indigo-500/20 overflow-hidden shadow-lg transition-transform hover:-translate-y-1">
+              <div class="px-4 py-3 border-b border-indigo-900/30 bg-indigo-900/10 flex justify-between items-center">
+                <span class="font-cyber text-xs tracking-widest text-indigo-400 font-bold">🎮 DISCORD/TELEGRAM</span>
+                <span data-status="discord_telegram" class="text-[10px] text-indigo-500 font-bold"></span>
+              </div>
+              <div class="p-4 flex flex-col gap-3">
+                <textarea id="editDiscord" rows="8" class="w-full bg-black/40 border border-indigo-900/50 rounded-lg p-4 text-gray-300 font-rajdhani text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none shadow-inner transition-colors"></textarea>
+                <div class="flex gap-2">
+                  <button data-approve="discord_telegram" class="approve-btn flex-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-indigo-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
+                  <button data-copy="editDiscord" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Twitter -->
+            <div class="flex flex-col bg-cyber-navy/30 rounded-xl border border-cyan-500/20 overflow-hidden shadow-lg transition-transform hover:-translate-y-1">
+              <div class="px-4 py-3 border-b border-cyan-900/30 bg-cyan-900/10 flex justify-between items-center">
+                <span class="font-cyber text-xs tracking-widest text-cyan-400 font-bold">🧵 UTAS X / TWITTER</span>
+                <span data-status="twitter_thread" class="text-[10px] text-cyan-500 font-bold"></span>
+              </div>
+              <div class="p-4 flex flex-col gap-3">
+                <textarea id="editTwitter" rows="8" class="w-full bg-black/40 border border-cyan-900/50 rounded-lg p-4 text-gray-300 font-rajdhani text-sm focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 outline-none resize-none shadow-inner transition-colors" placeholder="Tiap tweet dipisah baris kosong."></textarea>
+                <div class="flex gap-2">
+                  <button data-approve="twitter_thread" class="approve-btn flex-1 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-cyan-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
+                  <button data-copy="editTwitter" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Instagram -->
+            <div class="flex flex-col bg-cyber-navy/30 rounded-xl border border-cyber-fuchsia/20 overflow-hidden shadow-lg transition-transform hover:-translate-y-1">
+              <div class="px-4 py-3 border-b border-fuchsia-900/30 bg-fuchsia-900/10 flex justify-between items-center">
+                <span class="font-cyber text-xs tracking-widest text-cyber-fuchsia font-bold">📸 CAPTION INSTAGRAM</span>
+                <span data-status="instagram_caption" class="text-[10px] text-fuchsia-500 font-bold"></span>
+              </div>
+              <div class="p-4 flex flex-col gap-3">
+                <textarea id="editInstagram" rows="8" class="w-full bg-black/40 border border-fuchsia-900/50 rounded-lg p-4 text-gray-300 font-rajdhani text-sm focus:ring-1 focus:ring-cyber-fuchsia focus:border-cyber-fuchsia outline-none resize-none shadow-inner transition-colors"></textarea>
+                <div class="flex gap-2">
+                  <button data-approve="instagram_caption" class="approve-btn flex-1 bg-fuchsia-500/10 text-cyber-fuchsia border border-fuchsia-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-fuchsia-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
+                  <button data-copy="editInstagram" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calendar Suggester -->
+          <div class="bg-cyber-navy/30 border border-cyber-fuchsia/30 rounded-xl p-5 flex flex-col md:flex-row md:items-center gap-4 transition-all duration-300 hover:border-cyber-fuchsia/50 hover:shadow-neon-fuchsia">
+            <span class="font-cyber text-xs font-bold uppercase tracking-widest text-cyber-fuchsia whitespace-nowrap">📅 JADWAL DISARANKAN</span>
+            <div id="calendarSuggestion" class="text-sm font-rajdhani text-gray-300"></div>
+          </div>
+
+          <div class="flex justify-end pt-2">
+            <button id="exportBtn" class="font-cyber bg-transparent border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 text-xs font-bold tracking-widest px-6 py-3 rounded active:scale-95 transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              EXPORT KONTEN (.txt)
+            </button>
+          </div>
+        </section>
+
+        <!-- SECTION 3: Sentiment Dashboard (Tampil di main area setelah tombol sidebar diklik) -->
+        <section id="sentimentDashboard" class="hidden flex-col gap-6 mt-4">
+          <div class="flex items-center gap-4">
+            <h2 class="font-cyber text-lg tracking-[0.1em] text-cyber-cyan glow-text-cyan font-bold">ANALISIS SENTIMEN & TEMA</h2>
+            <div class="h-[1px] flex-1 bg-cyan-900/30"></div>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-cyber-navy/30 border border-gray-800 rounded-xl p-5 text-center transition-colors hover:bg-cyber-navy/50">
+              <div class="font-cyber text-3xl font-bold text-white" id="statTotal">-</div>
+              <div class="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-2">Total Komentar</div>
+            </div>
+            <div class="bg-cyber-navy/30 border border-emerald-900/50 rounded-xl p-5 text-center transition-colors hover:bg-cyber-navy/50">
+              <div class="font-cyber text-3xl font-bold text-emerald-400" id="statPositive">-</div>
+              <div class="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-2">Positif</div>
+            </div>
+            <div class="bg-cyber-navy/30 border border-red-900/50 rounded-xl p-5 text-center transition-colors hover:bg-cyber-navy/50">
+              <div class="font-cyber text-3xl font-bold text-red-400" id="statNegative">-</div>
+              <div class="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-2">Negatif</div>
+            </div>
+            <div class="bg-cyber-navy/30 border border-gray-800 rounded-xl p-5 text-center transition-colors hover:bg-cyber-navy/50">
+              <div class="font-cyber text-3xl font-bold text-gray-400" id="statNeutral">-</div>
+              <div class="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-2">Netral</div>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="col-span-1 bg-cyber-navy/30 border border-cyan-900/30 rounded-xl p-5">
+              <h3 class="font-cyber text-xs tracking-widest text-cyber-cyan font-bold mb-4">TEMA UTAMA</h3>
+              <div id="themeList" class="space-y-3 font-rajdhani text-sm"></div>
+            </div>
+            
+            <div class="col-span-2 bg-cyber-navy/30 border border-cyan-900/30 rounded-xl p-5 overflow-hidden flex flex-col">
+              <h3 class="font-cyber text-xs tracking-widest text-cyber-cyan font-bold mb-4">RINCIAN KOMENTAR</h3>
+              <div class="overflow-y-auto flex-1 max-h-[300px]">
+                <table class="w-full text-left font-rajdhani text-sm">
+                  <thead class="sticky top-0 bg-cyber-dark/90 backdrop-blur text-gray-500 text-[10px] font-sans tracking-widest uppercase border-b border-gray-800">
+                    <tr>
+                      <th class="py-2 px-3 font-medium">ID</th>
+                      <th class="py-2 px-3 font-medium">Sentimen</th>
+                      <th class="py-2 px-3 font-medium">Tema</th>
+                    </tr>
+                  </thead>
+                  <tbody id="itemsTableBody" class="divide-y divide-gray-800/50"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="py-6 text-center mt-auto">
+          <p class="text-[10px] text-gray-600 font-medium tracking-widest uppercase">
+            Project 5: AI Content Studio & Brand-Voice Assistant – Kinetik Arena · Prototipe tugas mahasiswa
+          </p>
+        </footer>
+      </div>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+  <script>
+    // Responsive Mobile Menu Script
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+    function toggleMenu() {
+      if (sidebar && sidebarBackdrop) {
+        sidebar.classList.toggle('-translate-x-full');
+        sidebarBackdrop.classList.toggle('hidden');
+      }
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
+    if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
+    if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', toggleMenu);
+  </script>
+</body>
+</html>

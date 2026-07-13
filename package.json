@@ -1,0 +1,17 @@
+{
+  "name": "ai-content-studio-brand-voice-assistant",
+  "version": "1.0.0",
+  "description": "Project 5: AI Content Studio & Brand-Voice Assistant (student prototype)",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@google/genai": "^2.11.0",
+    "papaparse": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
