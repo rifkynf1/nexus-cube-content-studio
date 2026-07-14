@@ -162,6 +162,18 @@
             <div class="h-[1px] flex-1 bg-cyan-900/30"></div>
           </div>
 
+          <div id="placeholderPanel" class="hidden mt-4 rounded-xl border border-amber-500/40 bg-amber-500/5 p-4 space-y-3">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path></svg>
+              <div>
+                <p class="text-sm font-cyber font-bold text-amber-300">MASIH ADA BAGIAN KOSONG</p>
+                <p class="text-xs text-gray-400 mt-1">AI belum tahu info ini karena tidak disebut di brief. Isi nilai aslinya di bawah, lalu klik Terapkan - langsung diganti di semua kartu, tanpa perlu generate ulang.</p>
+              </div>
+            </div>
+            <div id="placeholderInputs" class="grid sm:grid-cols-2 gap-3"></div>
+            <button id="applyPlaceholdersBtn" class="w-full sm:w-auto bg-amber-500/10 text-amber-300 border border-amber-500/40 rounded py-2 px-5 text-xs font-bold font-cyber tracking-wider hover:bg-amber-500/20 active:scale-95 transition-all">TERAPKAN KE SEMUA KONTEN</button>
+          </div>
+
           <div class="grid lg:grid-cols-2 gap-6 mt-6">
             <!-- WA -->
             <div class="flex flex-col bg-cyber-navy/30 rounded-xl border border-emerald-500/20 overflow-hidden shadow-lg transition-transform hover:-translate-y-1">
@@ -191,7 +203,7 @@
                     <input type="checkbox" data-spotcheck="whatsapp" class="mt-0.5" />
                     <span class="text-gray-400">Human spot-check: saya sudah cek manual & setuju dengan penilaian AI di atas.</span>
                   </label>
-                  <textarea data-spotcheck-notes="whatsapp" rows="2" placeholder="Catatan spot-check manual (opsional)..." class="w-full bg-black/40 border border-zinc-700 rounded p-2 text-gray-300 text-xs resize-none"></textarea>
+                  <span data-spotcheck-feedback="whatsapp" class="text-[11px] text-emerald-400/80 italic"></span>
                 </div>
               </div>
             </div>
@@ -225,7 +237,7 @@
                     <input type="checkbox" data-spotcheck="discord_telegram" class="mt-0.5" />
                     <span class="text-gray-400">Human spot-check: saya sudah cek manual & setuju dengan penilaian AI di atas.</span>
                   </label>
-                  <textarea data-spotcheck-notes="discord_telegram" rows="2" placeholder="Catatan spot-check manual (opsional)..." class="w-full bg-black/40 border border-zinc-700 rounded p-2 text-gray-300 text-xs resize-none"></textarea>
+                  <span data-spotcheck-feedback="discord_telegram" class="text-[11px] text-emerald-400/80 italic"></span>
                 </div>
               </div>
             </div>
@@ -258,7 +270,7 @@
                     <input type="checkbox" data-spotcheck="twitter_thread" class="mt-0.5" />
                     <span class="text-gray-400">Human spot-check: saya sudah cek manual & setuju dengan penilaian AI di atas.</span>
                   </label>
-                  <textarea data-spotcheck-notes="twitter_thread" rows="2" placeholder="Catatan spot-check manual (opsional)..." class="w-full bg-black/40 border border-zinc-700 rounded p-2 text-gray-300 text-xs resize-none"></textarea>
+                  <span data-spotcheck-feedback="twitter_thread" class="text-[11px] text-emerald-400/80 italic"></span>
                 </div>
               </div>
             </div>
@@ -291,7 +303,7 @@
                     <input type="checkbox" data-spotcheck="instagram_caption" class="mt-0.5" />
                     <span class="text-gray-400">Human spot-check: saya sudah cek manual & setuju dengan penilaian AI di atas.</span>
                   </label>
-                  <textarea data-spotcheck-notes="instagram_caption" rows="2" placeholder="Catatan spot-check manual (opsional)..." class="w-full bg-black/40 border border-zinc-700 rounded p-2 text-gray-300 text-xs resize-none"></textarea>
+                  <span data-spotcheck-feedback="instagram_caption" class="text-[11px] text-emerald-400/80 italic"></span>
                 </div>
               </div>
             </div>
@@ -338,7 +350,7 @@
           <!-- Weekly Summary & Negative Spike Alert -->
           <div class="mt-6">
             <h3 class="font-cyber text-xs tracking-widest text-cyber-cyan font-bold mb-1">RINGKASAN MINGGUAN & DETEKSI LONJAKAN NEGATIF</h3>
-            <p class="text-sm font-rajdhani text-gray-500 mb-3">Minggu dengan rasio komentar negatif ≥30% ditandai <span class="text-rose-400 font-semibold">SPIKE</span> — sinyal untuk dicek lebih dalam sebelum jadi krisis reputasi.</p>
+            <p class="text-sm font-rajdhani text-gray-500 mb-3">Minggu dengan rasio komentar negatif ≥30% ditandai <span class="text-rose-400 font-semibold">SPIKE</span>, sinyal untuk dicek lebih dalam sebelum jadi krisis reputasi.</p>
             <div id="spikeAlertBanner" class="hidden mb-3 flex items-center gap-3 rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-3">
               <svg class="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path></svg>
               <p class="text-xs font-rajdhani text-red-300" id="spikeAlertText"></p>

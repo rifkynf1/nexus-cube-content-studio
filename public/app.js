@@ -13,6 +13,11 @@ const editTwitter = document.getElementById("editTwitter");
 const editInstagram = document.getElementById("editInstagram");
 const exportBtn = document.getElementById("exportBtn");
 
+const placeholderPanel = document.getElementById("placeholderPanel");
+const placeholderInputs = document.getElementById("placeholderInputs");
+const applyPlaceholdersBtn = document.getElementById("applyPlaceholdersBtn");
+const allEditTextareas = [editWhatsapp, editDiscord, editTwitter, editInstagram];
+
 const loadSentimentBtn = document.getElementById("loadSentimentBtn");
 const sentimentStatus = document.getElementById("sentimentStatus");
 const sentimentDashboard = document.getElementById("sentimentDashboard");
@@ -35,6 +40,51 @@ function threadArrayToText(arr) {
 function threadTextToArray(text) {
   return text.split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean);
 }
+
+// ---- Deteksi placeholder yang belum diisi (mis. [NAMA VENUE], [LINK INFO]) ----
+// Cari semua "[XXX]" di 4 textarea, kumpulkan nama placeholder yang unik, lalu tampilkan
+// input kecil per placeholder supaya bisa diisi & diganti langsung (find-and-replace,
+// tanpa panggil AI lagi) di semua kartu sekaligus.
+function scanPlaceholders() {
+  const found = new Set();
+  allEditTextareas.forEach((ta) => {
+    const matches = ta.value.match(/\[([^\[\]]+)\]/g) || [];
+    matches.forEach((m) => found.add(m.slice(1, -1)));
+  });
+
+  if (!found.size) {
+    placeholderPanel.classList.add("hidden");
+    placeholderInputs.innerHTML = "";
+    return;
+  }
+
+  placeholderInputs.innerHTML = [...found]
+    .map(
+      (name) => `
+    <label class="flex flex-col gap-1 text-xs text-gray-400">
+      <span>[${name}]</span>
+      <input type="text" data-placeholder-input="${name}" placeholder="Isi nilai asli untuk ${name}..."
+        class="bg-black/40 border border-zinc-700 rounded p-2 text-gray-200 text-sm focus:ring-1 focus:ring-amber-500 focus:border-amber-500 outline-none" />
+    </label>
+  `
+    )
+    .join("");
+  placeholderPanel.classList.remove("hidden");
+}
+
+applyPlaceholdersBtn.addEventListener("click", () => {
+  const inputs = placeholderInputs.querySelectorAll("[data-placeholder-input]");
+  inputs.forEach((input) => {
+    const value = input.value.trim();
+    if (!value) return;
+    const name = input.dataset.placeholderInput;
+    const token = `[${name}]`;
+    allEditTextareas.forEach((ta) => {
+      ta.value = ta.value.split(token).join(value);
+    });
+  });
+  scanPlaceholders();
+});
 
 // ---- Generate Content ----
 generateBtn.addEventListener("click", async () => {
@@ -71,12 +121,13 @@ generateBtn.addEventListener("click", async () => {
       if (!el) return;
       const sched = calendar_suggestion && calendar_suggestion[key];
       el.textContent = sched
-        ? `Upload: ${sched.day}, ${sched.date} pukul ${sched.time} WIB — ${sched.reasoning}`
+        ? `Upload: ${sched.day}, ${sched.date} pukul ${sched.time} WIB. ${sched.reasoning}`
         : "";
     });
 
     resultSection.classList.remove("hidden");
     resultSection.classList.add("flex");
+    scanPlaceholders();
     generateStatus.textContent = "Konten berhasil dibuat. Silakan review & edit sebelum disetujui.";
     generateStatus.className = "text-sm text-emerald-400";
   } catch (err) {
@@ -100,6 +151,18 @@ document.querySelectorAll(".approve-btn").forEach((btn) => {
 
     statusEl.textContent = "✅ Disetujui";
     statusEl.className = "text-[11px] text-emerald-400";
+  });
+});
+
+// ---- Human Spot-Check feedback (bukan submit ke server - cuma state lokal browser,
+// ikut tersimpan ke file .txt begitu tombol Export diklik) ----
+document.querySelectorAll("[data-spotcheck]").forEach((checkbox) => {
+  const key = checkbox.dataset.spotcheck;
+  const feedbackEl = document.querySelector(`[data-spotcheck-feedback="${key}"]`);
+
+  checkbox.addEventListener("change", () => {
+    if (!feedbackEl) return;
+    feedbackEl.textContent = checkbox.checked ? "Tersimpan - akan ikut masuk saat kamu klik Export di bawah." : "";
   });
 });
 
@@ -189,11 +252,9 @@ document.querySelectorAll(".evaluate-btn").forEach((btn) => {
 // ---- Export ----
 function spotCheckNote(key) {
   const checkbox = document.querySelector(`[data-spotcheck="${key}"]`);
-  const notes = document.querySelector(`[data-spotcheck-notes="${key}"]`);
   if (!checkbox) return "";
   const agreed = checkbox.checked ? "Human spot-check: DISETUJUI oleh reviewer manusia." : "Human spot-check: belum/tidak disetujui manual.";
-  const noteText = notes && notes.value.trim() ? `Catatan: ${notes.value.trim()}` : "";
-  return `\n[${agreed}${noteText ? " " + noteText : ""}]`;
+  return `\n[${agreed}]`;
 }
 
 exportBtn.addEventListener("click", () => {
