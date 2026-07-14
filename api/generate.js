@@ -103,6 +103,17 @@ Tugasmu: buat konten promosi turnamen berdasarkan brief di atas dalam 4 format s
 3. Utas (thread) X/Twitter — array beberapa tweet berurutan, tweet pertama sebagai hook
 4. Caption Instagram (naratif & visual)
 
+ATURAN FORMATTING WAJIB untuk whatsapp, discord_telegram, dan instagram_caption (perhatikan
+baik-baik, ini sering dilanggar):
+- WAJIB pisahkan tiap bagian/poin dengan BARIS KOSONG (\\n\\n), sama persis seperti pola di
+  contoh few-shot di atas. JANGAN PERNAH menggabungkan semua kalimat jadi satu paragraf padat
+  tanpa jeda baris — itu SALAH walau isinya benar.
+- Sapaan pembuka, isi/poin detail (pakai emoji sebagai bullet di baris terpisah-pisah), dan
+  CTA penutup harus masing-masing jadi blok terpisah dengan baris kosong di antaranya, persis
+  seperti struktur di contoh few-shot.
+- Untuk twitter_thread, tiap elemen array adalah 1 tweet - jangan gabungkan beberapa tweet
+  jadi 1 elemen string panjang.
+
 Tanggal acuan hari ini (server, WIB): ${todayDate} (${todayDayName}). Semua tanggal yang kamu
 sarankan WAJIB berada di masa depan relatif ke tanggal acuan ini.
 

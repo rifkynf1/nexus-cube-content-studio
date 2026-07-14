@@ -80,7 +80,7 @@
       
       <nav class="flex-1 p-4 space-y-6 overflow-y-auto">
         <div>
-          <h3 class="text-[10px] uppercase tracking-widest text-gray-500 mb-4 px-2">Navigation</h3>
+          <h3 class="text-xs uppercase tracking-widest text-gray-500 mb-4 px-2">Navigation</h3>
           <ul class="space-y-2">
             <li>
               <a class="flex items-center gap-3 px-3 py-2 rounded border border-cyber-cyan/40 bg-cyber-cyan/10 text-cyber-cyan shadow-neon-cyan-sm" href="#">
@@ -91,28 +91,28 @@
         </div>
         
         <div class="pt-6 border-t border-cyan-900/30">
-          <h3 class="text-[10px] uppercase tracking-widest text-gray-500 mb-4 px-2">Data Analysis</h3>
+          <h3 class="text-xs uppercase tracking-widest text-gray-500 mb-4 px-2">Data Analysis</h3>
           <div class="bg-cyber-navy/50 p-4 rounded-lg border border-cyan-900/30">
-            <h4 class="font-cyber text-[11px] text-white tracking-wider mb-3 border-b border-cyber-cyan/20 pb-2">SENTIMENT & THEME DIGEST</h4>
+            <h4 class="font-cyber text-sm text-white tracking-wider mb-3 border-b border-cyber-cyan/20 pb-2">SENTIMENT & THEME DIGEST</h4>
             
             <!-- Dropdown Dataset -->
             <div class="mb-3">
-              <select id="datasetSelect" class="w-full bg-black/40 border border-cyan-900/50 rounded p-2 text-gray-300 font-sans text-[10px] focus:ring-1 focus:ring-cyber-cyan focus:border-cyber-cyan outline-none transition-colors">
+              <select id="datasetSelect" class="w-full bg-black/40 border border-cyan-900/50 rounded p-2 text-gray-300 font-sans text-xs focus:ring-1 focus:ring-cyber-cyan focus:border-cyber-cyan outline-none transition-colors">
                 <option value="comments_dataset.csv">Data: Turnamen Esports</option>
                 <option value="comments_event_offline.csv">Data: Event Offline</option>
                 <option value="upload">📁 Upload File CSV...</option>
               </select>
-              <input type="file" id="customCsvFile" accept=".csv" class="hidden mt-2 w-full text-[11px] text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-bold file:bg-cyber-cyan/20 file:text-cyber-cyan hover:file:bg-cyber-cyan/30 cursor-pointer file:cursor-pointer transition-colors" />
+              <input type="file" id="customCsvFile" accept=".csv" class="hidden mt-2 w-full text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-bold file:bg-cyber-cyan/20 file:text-cyber-cyan hover:file:bg-cyber-cyan/30 cursor-pointer file:cursor-pointer transition-colors" />
             </div>
 
             <!-- Tombol load dipindah ke sidebar, tapi ID tetap dipertahankan agar app.js berfungsi -->
-            <button id="loadSentimentBtn" class="w-full bg-cyber-cyan text-black py-2 px-3 rounded text-[10px] font-bold font-cyber hover:bg-white transition-colors flex items-center justify-center gap-2 shadow-neon-cyan">
+            <button id="loadSentimentBtn" class="w-full bg-cyber-cyan text-black py-2 px-3 rounded text-xs font-bold font-cyber hover:bg-white transition-colors flex items-center justify-center gap-2 shadow-neon-cyan">
               MUAT ANALISIS KOMENTAR
             </button>
-            <p class="mt-3 text-[10px] text-gray-500 italic">Pilih sumber data untuk diproses AI.</p>
+            <p class="mt-3 text-xs text-gray-500 italic">Pilih sumber data untuk diproses AI.</p>
             
             <!-- Status ditambahkan di bawah tombol di sidebar -->
-            <div id="sentimentStatus" class="text-[10px] mt-3 font-medium text-center"></div>
+            <div id="sentimentStatus" class="text-xs mt-3 font-medium text-center"></div>
           </div>
         </div>
       </nav>
@@ -127,7 +127,7 @@
             <span class="text-cyber-cyan opacity-60 font-light">//</span>
             <span class="text-cyber-cyan glow-text-cyan">CONTENT STUDIO</span>
           </h1>
-          <p class="text-[10px] md:text-xs text-gray-400 mt-2 font-medium">AI Content Studio & Brand Voice Assistant · Powered by Nexus Team.</p>
+          <p class="text-xs md:text-sm text-gray-400 mt-2 font-medium">AI Content Studio & Brand Voice Assistant · Powered by Nexus Team.</p>
         </div>
       </header>
 
@@ -170,11 +170,11 @@
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.5 14.14c-.23.65-1.36 1.24-1.87 1.28-.48.04-.96.06-1.55-.1-.36-.1-.82-.26-1.42-.51-2.5-1.08-4.13-3.6-4.26-3.77-.13-.17-1.02-1.36-1.02-2.6 0-1.24.65-1.85.88-2.1.23-.25.5-.31.67-.31.17 0 .34 0 .48.01.16.01.36-.06.56.43.23.55.78 1.9.85 2.04.07.14.11.3.02.48-.09.18-.14.29-.27.45-.14.16-.29.36-.41.48-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.21 1.37.28.14.44.12.6-.07.16-.18.68-.79.86-1.06.18-.27.36-.23.6-.14.25.09 1.58.75 1.85.88.27.14.45.2.51.32.07.11.07.65-.16 1.3z"/></svg>
                   WHATSAPP
                 </span>
-                <span data-status="whatsapp" class="text-[10px] text-emerald-500 font-bold"></span>
+                <span data-status="whatsapp" class="text-xs text-emerald-500 font-bold"></span>
               </div>
               <div class="p-4 flex flex-col gap-3">
                 <textarea id="editWhatsapp" rows="8" class="w-full bg-black/40 border border-emerald-900/50 rounded-lg p-4 text-gray-300 font-rajdhani text-sm focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none resize-none shadow-inner transition-colors"></textarea>
-                <p data-schedule="whatsapp" class="text-[10px] text-gray-500 font-rajdhani italic"></p>
+                <p data-schedule="whatsapp" class="text-xs text-gray-500 font-rajdhani italic"></p>
                 <div class="flex gap-2">
                   <button data-approve="whatsapp" class="approve-btn flex-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-emerald-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
                   <button data-copy="editWhatsapp" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
@@ -204,11 +204,11 @@
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.36 18.9 19.3c-.22 1-.82 1.24-1.65.77l-4.56-3.36-2.2 2.12c-.24.24-.45.45-.9.45l.32-4.6 8.4-7.59c.36-.33-.08-.51-.56-.18L7.03 13.1l-4.5-1.4c-.98-.31-1-.98.2-1.45L20.6 3.44c.82-.31 1.53.19 1.3.92z"/></svg>
                   DISCORD/TELEGRAM
                 </span>
-                <span data-status="discord_telegram" class="text-[10px] text-indigo-500 font-bold"></span>
+                <span data-status="discord_telegram" class="text-xs text-indigo-500 font-bold"></span>
               </div>
               <div class="p-4 flex flex-col gap-3">
                 <textarea id="editDiscord" rows="8" class="w-full bg-black/40 border border-indigo-900/50 rounded-lg p-4 text-gray-300 font-rajdhani text-sm focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none shadow-inner transition-colors"></textarea>
-                <p data-schedule="discord_telegram" class="text-[10px] text-gray-500 font-rajdhani italic"></p>
+                <p data-schedule="discord_telegram" class="text-xs text-gray-500 font-rajdhani italic"></p>
                 <div class="flex gap-2">
                   <button data-approve="discord_telegram" class="approve-btn flex-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-indigo-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
                   <button data-copy="editDiscord" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
@@ -237,11 +237,11 @@
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.24 3H21l-6.5 7.43L22 21h-6.28l-4.92-6.43L4.9 21H2.13l6.95-7.94L2 3h6.44l4.44 5.88L18.24 3zm-1.1 16.17h1.55L7.03 4.75H5.36l11.78 14.42z"/></svg>
                   UTAS X / TWITTER
                 </span>
-                <span data-status="twitter_thread" class="text-[10px] text-cyan-500 font-bold"></span>
+                <span data-status="twitter_thread" class="text-xs text-cyan-500 font-bold"></span>
               </div>
               <div class="p-4 flex flex-col gap-3">
                 <textarea id="editTwitter" rows="8" class="w-full bg-black/40 border border-cyan-900/50 rounded-lg p-4 text-gray-300 font-rajdhani text-sm focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 outline-none resize-none shadow-inner transition-colors" placeholder="Tiap tweet dipisah baris kosong."></textarea>
-                <p data-schedule="twitter_thread" class="text-[10px] text-gray-500 font-rajdhani italic"></p>
+                <p data-schedule="twitter_thread" class="text-xs text-gray-500 font-rajdhani italic"></p>
                 <div class="flex gap-2">
                   <button data-approve="twitter_thread" class="approve-btn flex-1 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-cyan-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
                   <button data-copy="editTwitter" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
@@ -270,11 +270,11 @@
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.55.21.95.47 1.36.88.41.41.67.81.88 1.36.16.42.36 1.05.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.21.55-.47.95-.88 1.36-.41.41-.81.67-1.36.88-.42.16-1.05.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.55-.21-.95-.47-1.36-.88-.41-.41-.67-.81-.88-1.36-.16-.42-.36-1.05-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.21-.55.47-.95.88-1.36.41-.41.81-.67 1.36-.88.42-.16 1.05-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07zM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 12 18.16 6.16 6.16 0 0 0 12 5.84zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.41-10.4a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0z"/></svg>
                   CAPTION INSTAGRAM
                 </span>
-                <span data-status="instagram_caption" class="text-[10px] text-fuchsia-500 font-bold"></span>
+                <span data-status="instagram_caption" class="text-xs text-fuchsia-500 font-bold"></span>
               </div>
               <div class="p-4 flex flex-col gap-3">
                 <textarea id="editInstagram" rows="8" class="w-full bg-black/40 border border-fuchsia-900/50 rounded-lg p-4 text-gray-300 font-rajdhani text-sm focus:ring-1 focus:ring-cyber-fuchsia focus:border-cyber-fuchsia outline-none resize-none shadow-inner transition-colors"></textarea>
-                <p data-schedule="instagram_caption" class="text-[10px] text-gray-500 font-rajdhani italic"></p>
+                <p data-schedule="instagram_caption" class="text-xs text-gray-500 font-rajdhani italic"></p>
                 <div class="flex gap-2">
                   <button data-approve="instagram_caption" class="approve-btn flex-1 bg-fuchsia-500/10 text-cyber-fuchsia border border-fuchsia-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-fuchsia-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
                   <button data-copy="editInstagram" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
@@ -315,37 +315,37 @@
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
             <div class="bg-cyber-navy/30 border border-gray-800 rounded-xl p-5 text-center transition-colors hover:bg-cyber-navy/50 flex flex-col justify-center">
               <div class="font-cyber text-3xl font-bold text-white" id="statTotal">-</div>
-              <div class="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-2">Total Komentar</div>
-              <div class="text-[9px] text-gray-500/70 mt-1 italic">Diambil dari dataset</div>
+              <div class="font-sans text-xs uppercase tracking-widest text-gray-500 mt-2">Total Komentar</div>
+              <div class="text-sm text-gray-500/70 mt-1 italic">Diambil dari dataset</div>
             </div>
             <div class="bg-cyber-navy/30 border border-emerald-900/50 rounded-xl p-5 text-center transition-colors hover:bg-cyber-navy/50 flex flex-col justify-center">
               <div class="font-cyber text-3xl font-bold text-emerald-400" id="statPositive">-</div>
-              <div class="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-2">Positif</div>
-              <div class="text-[9px] text-emerald-500/70 mt-1 italic">(Apresiasi / Suka)</div>
+              <div class="font-sans text-xs uppercase tracking-widest text-gray-500 mt-2">Positif</div>
+              <div class="text-sm text-emerald-500/70 mt-1 italic">(Apresiasi / Suka)</div>
             </div>
             <div class="bg-cyber-navy/30 border border-red-900/50 rounded-xl p-5 text-center transition-colors hover:bg-cyber-navy/50 flex flex-col justify-center">
               <div class="font-cyber text-3xl font-bold text-red-400" id="statNegative">-</div>
-              <div class="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-2">Negatif</div>
-              <div class="text-[9px] text-red-500/70 mt-1 italic">(Keluhan / Masalah)</div>
+              <div class="font-sans text-xs uppercase tracking-widest text-gray-500 mt-2">Negatif</div>
+              <div class="text-sm text-red-500/70 mt-1 italic">(Keluhan / Masalah)</div>
             </div>
             <div class="bg-cyber-navy/30 border border-gray-800 rounded-xl p-5 text-center transition-colors hover:bg-cyber-navy/50 flex flex-col justify-center">
               <div class="font-cyber text-3xl font-bold text-gray-400" id="statNeutral">-</div>
-              <div class="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-2">Netral</div>
-              <div class="text-[9px] text-gray-500/70 mt-1 italic">(Pertanyaan / Info)</div>
+              <div class="font-sans text-xs uppercase tracking-widest text-gray-500 mt-2">Netral</div>
+              <div class="text-sm text-gray-500/70 mt-1 italic">(Pertanyaan / Info)</div>
             </div>
           </div>
 
           <!-- Weekly Summary & Negative Spike Alert -->
           <div class="mt-6">
             <h3 class="font-cyber text-xs tracking-widest text-cyber-cyan font-bold mb-1">RINGKASAN MINGGUAN & DETEKSI LONJAKAN NEGATIF</h3>
-            <p class="text-[11px] font-rajdhani text-gray-500 mb-3">Minggu dengan rasio komentar negatif ≥30% ditandai <span class="text-rose-400 font-semibold">SPIKE</span> — sinyal untuk dicek lebih dalam sebelum jadi krisis reputasi.</p>
+            <p class="text-sm font-rajdhani text-gray-500 mb-3">Minggu dengan rasio komentar negatif ≥30% ditandai <span class="text-rose-400 font-semibold">SPIKE</span> — sinyal untuk dicek lebih dalam sebelum jadi krisis reputasi.</p>
             <div id="spikeAlertBanner" class="hidden mb-3 flex items-center gap-3 rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-3">
               <svg class="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path></svg>
               <p class="text-xs font-rajdhani text-red-300" id="spikeAlertText"></p>
             </div>
             <div class="overflow-x-auto rounded-xl border border-cyan-900/30">
               <table class="w-full text-left font-rajdhani text-sm">
-                <thead class="bg-cyber-navy/50 text-gray-500 text-[10px] font-sans tracking-widest uppercase border-b border-gray-800">
+                <thead class="bg-cyber-navy/50 text-gray-500 text-xs font-sans tracking-widest uppercase border-b border-gray-800">
                   <tr>
                     <th class="py-2 px-3 font-medium">Minggu</th>
                     <th class="py-2 px-3 font-medium">Total</th>
@@ -371,7 +371,7 @@
               <h3 class="font-cyber text-xs tracking-widest text-cyber-cyan font-bold mb-4 flex-shrink-0">RINCIAN KOMENTAR</h3>
               <div class="overflow-y-auto pr-2 custom-scrollbar">
                 <table class="w-full text-left font-rajdhani text-sm">
-                  <thead class="sticky top-0 bg-cyber-dark/95 backdrop-blur text-gray-500 text-[10px] font-sans tracking-widest uppercase border-b border-gray-800">
+                  <thead class="sticky top-0 bg-cyber-dark/95 backdrop-blur text-gray-500 text-xs font-sans tracking-widest uppercase border-b border-gray-800">
                     <tr>
                       <th class="py-2 px-3 font-medium text-left w-12">ID</th>
                       <th class="py-2 px-3 font-medium text-left w-24">Sentimen</th>
@@ -387,7 +387,7 @@
         </section>
 
         <footer class="py-6 text-center mt-auto">
-          <p class="text-[10px] text-gray-600 font-medium tracking-widest uppercase">
+          <p class="text-xs text-gray-600 font-medium tracking-widest uppercase">
             AI Content Studio & Brand Voice Assistant · Nexus Team
           </p>
         </footer>
