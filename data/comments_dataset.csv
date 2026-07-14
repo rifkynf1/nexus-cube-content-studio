@@ -1,16 +1,21 @@
-id,platform,comment
-1,discord,"War tiket kemarin lancar banget, langsung dapet slot buat squad gw. GG admin!"
-2,twitter,"Server match kemarin lag parah pas grand final, bikin momen penting jadi kacau."
-3,discord,"Bracket-nya jelas dan gampang dipahami, rules juga fair buat semua tim."
-4,instagram,"Prize pool nya gede banget taun ini, makin semangat push rank buat kualifikasi."
-5,twitter,"Streaming-nya putus-putus terus pas partai final, kecewa banget nontonnya."
-6,discord,"Admin fast response pas ada masalah pendaftaran, salut deh pelayanannya."
-7,telegram,"Info jadwal sering telat di-update, jadi banyak yang bingung match kapan mulai."
-8,discord,"Match day kemarin seru banget, panitia on point ngatur jadwalnya."
-9,twitter,"Tiket nonton offline war-nya susah banget, keburu abis dalam hitungan menit."
-10,instagram,"Venue-nya keren, setup panggung sama lighting-nya bikin suasana makin hype."
-11,discord,"Ada bug di sistem skor pas fase grup, untung admin cepat benerin."
-12,twitter,"Nexus Cube emang beda kelasnya, turnamen paling niat tahun ini!"
-13,telegram,"Mohon info dong kalau ada turnamen Free Fire selanjutnya, pengen ikut lagi."
-14,instagram,"Biaya pendaftaran naik terus tiap season, agak berat buat tim kecil."
-15,discord,"Overall pengalaman ikut turnamen ini positif, cuma perlu perbaikan di sisi koneksi server."
+post_id,comment_text,channel,timestamp,likes,shares,brand_mentioned,follower_count
+P-0001,"War tiket kemarin lancar banget, langsung dapet slot buat squad gw. GG admin!",discord,2026-06-01T10:15:00Z,12,1,true,850
+P-0002,"Bracket-nya jelas dan gampang dipahami, rules juga fair buat semua tim.",discord,2026-06-02T14:20:00Z,8,0,true,420
+P-0003,"Prize pool nya gede banget taun ini, makin semangat push rank buat kualifikasi.",instagram,2026-06-03T09:05:00Z,45,6,true,2100
+P-0004,"Admin fast response pas ada masalah pendaftaran, salut deh pelayanannya.",discord,2026-06-04T18:40:00Z,15,1,true,850
+P-0005,"Match day kemarin seru banget, panitia on point ngatur jadwalnya.",discord,2026-06-05T20:10:00Z,22,3,true,850
+P-0006,"Venue-nya keren, setup panggung sama lighting-nya bikin suasana makin hype.",instagram,2026-06-06T11:30:00Z,60,10,true,2100
+P-0007,"Info jadwal sering telat di-update, jadi banyak yang bingung match kapan mulai.",telegram,2026-06-07T08:00:00Z,5,0,true,310
+P-0008,"Mohon info dong kalau ada turnamen Free Fire selanjutnya, pengen ikut lagi.",telegram,2026-06-08T13:15:00Z,3,0,true,310
+P-0009,"Server match kemarin lag parah pas grand final, bikin momen penting jadi kacau.",twitter,2026-06-13T21:00:00Z,88,25,true,5400
+P-0010,"Streaming-nya putus-putus terus pas partai final, kecewa banget nontonnya.",twitter,2026-06-13T21:10:00Z,64,18,true,5400
+P-0011,"Ada bug di sistem skor pas fase grup, untung admin cepat benerin.",discord,2026-06-14T09:45:00Z,10,1,true,850
+P-0012,"Tiket nonton offline war-nya susah banget, keburu abis dalam hitungan menit.",twitter,2026-06-14T15:20:00Z,72,20,true,5400
+P-0013,"Kecewa sama koneksi server, ini turnamen kedua kalinya kejadian lag pas final.",twitter,2026-06-14T22:00:00Z,55,12,true,5400
+P-0014,"Biaya pendaftaran naik terus tiap season, agak berat buat tim kecil.",instagram,2026-06-15T10:00:00Z,30,4,true,2100
+P-0015,"Overall pengalaman ikut turnamen ini positif, cuma perlu perbaikan di sisi koneksi server.",discord,2026-06-15T16:30:00Z,18,2,true,850
+P-0016,"Nexus Cube emang beda kelasnya, turnamen paling niat tahun ini!",twitter,2026-06-20T12:00:00Z,95,30,true,5400
+P-0017,"War tiket kali ini lebih tertib, sistem antrian onlinenya membantu banget.",discord,2026-06-21T11:00:00Z,20,2,true,850
+P-0018,"Match day berjalan lancar, gak ada kendala teknis berarti minggu ini.",discord,2026-06-22T19:30:00Z,14,1,true,850
+P-0019,"Prize pool dan hadiah turnamen makin menarik tiap season, keep it up!",instagram,2026-06-23T09:15:00Z,50,7,true,2100
+P-0020,"Biasa aja sih minggu ini, gak ada yang spesial tapi juga gak mengecewakan.",instagram,2026-06-24T14:00:00Z,9,0,true,2100

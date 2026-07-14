@@ -1,11 +1,11 @@
-id,platform,comment
-1,instagram,"Venue offline kemarin sempit banget, sumpek pas nonton match exhibition-nya."
-2,twitter,"Guest star pro player-nya keren banget! Makasih Nexus Cube udah ngundang mereka."
-3,discord,"Sistem antrian tiket on the spot kacau balau, tolong diperbaiki lagi min."
-4,telegram,"Ada info buat merchandise resminya dijual online nggak? Kemarin kehabisan."
-5,instagram,"Lighting panggung sama sound system-nya juara! Vibe turnamennya dapet banget."
-6,twitter,"Booth makanan di lokasi kurang banyak, antriannya panjang bener."
-7,discord,"Seru banget bisa mabar langsung sama idola, next bikin acara kayak gini lagi ya!"
-8,telegram,"Kecewa acara meet & greet dipotong waktunya, padahal udah nunggu lama."
-9,instagram,"Sumpah acara cosplay di sela-sela exhibition match itu menghibur banget."
-10,twitter,"Min, besok-besok sewa gedung yang lebih gede dong, parkirannya susah."
+post_id,comment_text,channel,timestamp,likes,shares,brand_mentioned,follower_count
+P-E001,"Venue offline kemarin sempit banget, sumpek pas nonton match exhibition-nya.",instagram,2026-07-01T14:00:00Z,20,2,true,2100
+P-E002,"Guest star pro player-nya keren banget! Makasih Nexus Cube udah ngundang mereka.",twitter,2026-07-01T15:30:00Z,80,15,true,5400
+P-E003,"Sistem antrian tiket on the spot kacau balau, tolong diperbaiki lagi min.",discord,2026-07-01T16:10:00Z,25,3,true,850
+P-E004,"Ada info buat merchandise resminya dijual online nggak? Kemarin kehabisan.",telegram,2026-07-02T09:20:00Z,6,0,true,310
+P-E005,"Lighting panggung sama sound system-nya juara! Vibe turnamennya dapet banget.",instagram,2026-07-02T18:00:00Z,55,8,true,2100
+P-E006,"Booth makanan di lokasi kurang banyak, antriannya panjang bener.",twitter,2026-07-02T19:15:00Z,40,5,true,5400
+P-E007,"Seru banget bisa mabar langsung sama idola, next bikin acara kayak gini lagi ya!",discord,2026-07-03T10:00:00Z,30,4,true,850
+P-E008,"Kecewa acara meet & greet dipotong waktunya, padahal udah nunggu lama.",telegram,2026-07-03T11:45:00Z,18,2,true,310
+P-E009,"Sumpah acara cosplay di sela-sela exhibition match itu menghibur banget.",instagram,2026-07-03T20:00:00Z,48,6,true,2100
+P-E010,"Min, besok-besok sewa gedung yang lebih gede dong, parkirannya susah.",twitter,2026-07-04T08:30:00Z,22,3,true,5400

@@ -166,7 +166,10 @@
             <!-- WA -->
             <div class="flex flex-col bg-cyber-navy/30 rounded-xl border border-emerald-500/20 overflow-hidden shadow-lg transition-transform hover:-translate-y-1">
               <div class="px-4 py-3 border-b border-emerald-900/30 bg-emerald-900/10 flex justify-between items-center">
-                <span class="font-cyber text-xs tracking-widest text-emerald-400 font-bold">📱 WHATSAPP</span>
+                <span class="font-cyber text-xs tracking-widest text-emerald-400 font-bold flex items-center gap-2">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.5 14.14c-.23.65-1.36 1.24-1.87 1.28-.48.04-.96.06-1.55-.1-.36-.1-.82-.26-1.42-.51-2.5-1.08-4.13-3.6-4.26-3.77-.13-.17-1.02-1.36-1.02-2.6 0-1.24.65-1.85.88-2.1.23-.25.5-.31.67-.31.17 0 .34 0 .48.01.16.01.36-.06.56.43.23.55.78 1.9.85 2.04.07.14.11.3.02.48-.09.18-.14.29-.27.45-.14.16-.29.36-.41.48-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.21 1.37.28.14.44.12.6-.07.16-.18.68-.79.86-1.06.18-.27.36-.23.6-.14.25.09 1.58.75 1.85.88.27.14.45.2.51.32.07.11.07.65-.16 1.3z"/></svg>
+                  WHATSAPP
+                </span>
                 <span data-status="whatsapp" class="text-[10px] text-emerald-500 font-bold"></span>
               </div>
               <div class="p-4 flex flex-col gap-3">
@@ -174,6 +177,20 @@
                 <div class="flex gap-2">
                   <button data-approve="whatsapp" class="approve-btn flex-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-emerald-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
                   <button data-copy="editWhatsapp" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
+                  <button data-evaluate="whatsapp" class="evaluate-btn flex-1 bg-transparent text-amber-400 border border-amber-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-amber-500/10 active:scale-95 transition-all">EVALUASI (AI JUDGE)</button>
+                </div>
+                <div data-eval-panel="whatsapp" class="hidden rounded-lg border border-amber-500/30 bg-black/30 p-3 space-y-2 text-xs">
+                  <div data-eval-criteria="whatsapp" class="space-y-1"></div>
+                  <div class="flex items-center justify-between pt-1 border-t border-amber-900/30">
+                    <span class="font-cyber font-bold text-amber-300" data-eval-overall="whatsapp"></span>
+                    <span data-eval-verdict="whatsapp"></span>
+                  </div>
+                  <p class="text-gray-400 italic" data-eval-summary="whatsapp"></p>
+                  <label class="flex items-start gap-2 pt-2 border-t border-amber-900/30">
+                    <input type="checkbox" data-spotcheck="whatsapp" class="mt-0.5" />
+                    <span class="text-gray-400">Human spot-check: saya sudah cek manual & setuju dengan penilaian AI di atas.</span>
+                  </label>
+                  <textarea data-spotcheck-notes="whatsapp" rows="2" placeholder="Catatan spot-check manual (opsional)..." class="w-full bg-black/40 border border-zinc-700 rounded p-2 text-gray-300 text-xs resize-none"></textarea>
                 </div>
               </div>
             </div>
@@ -181,7 +198,11 @@
             <!-- Discord -->
             <div class="flex flex-col bg-cyber-navy/30 rounded-xl border border-indigo-500/20 overflow-hidden shadow-lg transition-transform hover:-translate-y-1">
               <div class="px-4 py-3 border-b border-indigo-900/30 bg-indigo-900/10 flex justify-between items-center">
-                <span class="font-cyber text-xs tracking-widest text-indigo-400 font-bold">🎮 DISCORD/TELEGRAM</span>
+                <span class="font-cyber text-xs tracking-widest text-indigo-400 font-bold flex items-center gap-2">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.9-1.52.07.07 0 0 0-.08.04c-.21.38-.45.86-.61 1.24a18.3 18.3 0 0 0-5.48 0 12.6 12.6 0 0 0-.62-1.24.08.08 0 0 0-.08-.04c-1.7.3-3.36.82-4.9 1.52a.07.07 0 0 0-.03.03C.87 8.6.17 12.7.5 16.75a.08.08 0 0 0 .03.06 19.9 19.9 0 0 0 6 3.03.08.08 0 0 0 .08-.03c.46-.63.87-1.3 1.23-2a.08.08 0 0 0-.04-.11 13.1 13.1 0 0 1-1.87-.9.08.08 0 0 1-.01-.13c.13-.09.25-.19.37-.29a.07.07 0 0 1 .08-.01c3.93 1.79 8.18 1.79 12.06 0a.07.07 0 0 1 .08.01c.12.1.24.2.37.29a.08.08 0 0 1-.01.13c-.6.35-1.22.65-1.87.9a.08.08 0 0 0-.04.11c.36.7.78 1.37 1.23 2a.08.08 0 0 0 .08.03 19.8 19.8 0 0 0 6.01-3.03.08.08 0 0 0 .03-.06c.4-4.68-.67-8.75-2.83-12.35a.06.06 0 0 0-.03-.03zM8.68 14.3c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.21 0 2.17 1.1 2.15 2.42 0 1.34-.95 2.42-2.15 2.42zm6.65 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.21 0 2.17 1.1 2.15 2.42 0 1.34-.94 2.42-2.15 2.42z"/></svg>
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.36 18.9 19.3c-.22 1-.82 1.24-1.65.77l-4.56-3.36-2.2 2.12c-.24.24-.45.45-.9.45l.32-4.6 8.4-7.59c.36-.33-.08-.51-.56-.18L7.03 13.1l-4.5-1.4c-.98-.31-1-.98.2-1.45L20.6 3.44c.82-.31 1.53.19 1.3.92z"/></svg>
+                  DISCORD/TELEGRAM
+                </span>
                 <span data-status="discord_telegram" class="text-[10px] text-indigo-500 font-bold"></span>
               </div>
               <div class="p-4 flex flex-col gap-3">
@@ -189,6 +210,20 @@
                 <div class="flex gap-2">
                   <button data-approve="discord_telegram" class="approve-btn flex-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-indigo-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
                   <button data-copy="editDiscord" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
+                  <button data-evaluate="discord_telegram" class="evaluate-btn flex-1 bg-transparent text-amber-400 border border-amber-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-amber-500/10 active:scale-95 transition-all">EVALUASI (AI JUDGE)</button>
+                </div>
+                <div data-eval-panel="discord_telegram" class="hidden rounded-lg border border-amber-500/30 bg-black/30 p-3 space-y-2 text-xs">
+                  <div data-eval-criteria="discord_telegram" class="space-y-1"></div>
+                  <div class="flex items-center justify-between pt-1 border-t border-amber-900/30">
+                    <span class="font-cyber font-bold text-amber-300" data-eval-overall="discord_telegram"></span>
+                    <span data-eval-verdict="discord_telegram"></span>
+                  </div>
+                  <p class="text-gray-400 italic" data-eval-summary="discord_telegram"></p>
+                  <label class="flex items-start gap-2 pt-2 border-t border-amber-900/30">
+                    <input type="checkbox" data-spotcheck="discord_telegram" class="mt-0.5" />
+                    <span class="text-gray-400">Human spot-check: saya sudah cek manual & setuju dengan penilaian AI di atas.</span>
+                  </label>
+                  <textarea data-spotcheck-notes="discord_telegram" rows="2" placeholder="Catatan spot-check manual (opsional)..." class="w-full bg-black/40 border border-zinc-700 rounded p-2 text-gray-300 text-xs resize-none"></textarea>
                 </div>
               </div>
             </div>
@@ -196,7 +231,10 @@
             <!-- Twitter -->
             <div class="flex flex-col bg-cyber-navy/30 rounded-xl border border-cyan-500/20 overflow-hidden shadow-lg transition-transform hover:-translate-y-1">
               <div class="px-4 py-3 border-b border-cyan-900/30 bg-cyan-900/10 flex justify-between items-center">
-                <span class="font-cyber text-xs tracking-widest text-cyan-400 font-bold">🧵 UTAS X / TWITTER</span>
+                <span class="font-cyber text-xs tracking-widest text-cyan-400 font-bold flex items-center gap-2">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.24 3H21l-6.5 7.43L22 21h-6.28l-4.92-6.43L4.9 21H2.13l6.95-7.94L2 3h6.44l4.44 5.88L18.24 3zm-1.1 16.17h1.55L7.03 4.75H5.36l11.78 14.42z"/></svg>
+                  UTAS X / TWITTER
+                </span>
                 <span data-status="twitter_thread" class="text-[10px] text-cyan-500 font-bold"></span>
               </div>
               <div class="p-4 flex flex-col gap-3">
@@ -204,6 +242,20 @@
                 <div class="flex gap-2">
                   <button data-approve="twitter_thread" class="approve-btn flex-1 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-cyan-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
                   <button data-copy="editTwitter" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
+                  <button data-evaluate="twitter_thread" class="evaluate-btn flex-1 bg-transparent text-amber-400 border border-amber-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-amber-500/10 active:scale-95 transition-all">EVALUASI (AI JUDGE)</button>
+                </div>
+                <div data-eval-panel="twitter_thread" class="hidden rounded-lg border border-amber-500/30 bg-black/30 p-3 space-y-2 text-xs">
+                  <div data-eval-criteria="twitter_thread" class="space-y-1"></div>
+                  <div class="flex items-center justify-between pt-1 border-t border-amber-900/30">
+                    <span class="font-cyber font-bold text-amber-300" data-eval-overall="twitter_thread"></span>
+                    <span data-eval-verdict="twitter_thread"></span>
+                  </div>
+                  <p class="text-gray-400 italic" data-eval-summary="twitter_thread"></p>
+                  <label class="flex items-start gap-2 pt-2 border-t border-amber-900/30">
+                    <input type="checkbox" data-spotcheck="twitter_thread" class="mt-0.5" />
+                    <span class="text-gray-400">Human spot-check: saya sudah cek manual & setuju dengan penilaian AI di atas.</span>
+                  </label>
+                  <textarea data-spotcheck-notes="twitter_thread" rows="2" placeholder="Catatan spot-check manual (opsional)..." class="w-full bg-black/40 border border-zinc-700 rounded p-2 text-gray-300 text-xs resize-none"></textarea>
                 </div>
               </div>
             </div>
@@ -211,7 +263,10 @@
             <!-- Instagram -->
             <div class="flex flex-col bg-cyber-navy/30 rounded-xl border border-cyber-fuchsia/20 overflow-hidden shadow-lg transition-transform hover:-translate-y-1">
               <div class="px-4 py-3 border-b border-fuchsia-900/30 bg-fuchsia-900/10 flex justify-between items-center">
-                <span class="font-cyber text-xs tracking-widest text-cyber-fuchsia font-bold">📸 CAPTION INSTAGRAM</span>
+                <span class="font-cyber text-xs tracking-widest text-cyber-fuchsia font-bold flex items-center gap-2">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.55.21.95.47 1.36.88.41.41.67.81.88 1.36.16.42.36 1.05.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.21.55-.47.95-.88 1.36-.41.41-.81.67-1.36.88-.42.16-1.05.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.55-.21-.95-.47-1.36-.88-.41-.41-.67-.81-.88-1.36-.16-.42-.36-1.05-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.21-.55.47-.95.88-1.36.41-.41.81-.67 1.36-.88.42-.16 1.05-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07zM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 12 18.16 6.16 6.16 0 0 0 12 5.84zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.41-10.4a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0z"/></svg>
+                  CAPTION INSTAGRAM
+                </span>
                 <span data-status="instagram_caption" class="text-[10px] text-fuchsia-500 font-bold"></span>
               </div>
               <div class="p-4 flex flex-col gap-3">
@@ -219,6 +274,20 @@
                 <div class="flex gap-2">
                   <button data-approve="instagram_caption" class="approve-btn flex-1 bg-fuchsia-500/10 text-cyber-fuchsia border border-fuchsia-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-fuchsia-500/20 active:scale-95 transition-all">✅ SETUJUI</button>
                   <button data-copy="editInstagram" class="copy-btn flex-1 bg-transparent text-gray-400 border border-transparent hover:border-gray-700 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:text-white active:scale-95 transition-all">COPY</button>
+                  <button data-evaluate="instagram_caption" class="evaluate-btn flex-1 bg-transparent text-amber-400 border border-amber-500/30 rounded py-2 text-xs font-bold font-cyber tracking-wider hover:bg-amber-500/10 active:scale-95 transition-all">EVALUASI (AI JUDGE)</button>
+                </div>
+                <div data-eval-panel="instagram_caption" class="hidden rounded-lg border border-amber-500/30 bg-black/30 p-3 space-y-2 text-xs">
+                  <div data-eval-criteria="instagram_caption" class="space-y-1"></div>
+                  <div class="flex items-center justify-between pt-1 border-t border-amber-900/30">
+                    <span class="font-cyber font-bold text-amber-300" data-eval-overall="instagram_caption"></span>
+                    <span data-eval-verdict="instagram_caption"></span>
+                  </div>
+                  <p class="text-gray-400 italic" data-eval-summary="instagram_caption"></p>
+                  <label class="flex items-start gap-2 pt-2 border-t border-amber-900/30">
+                    <input type="checkbox" data-spotcheck="instagram_caption" class="mt-0.5" />
+                    <span class="text-gray-400">Human spot-check: saya sudah cek manual & setuju dengan penilaian AI di atas.</span>
+                  </label>
+                  <textarea data-spotcheck-notes="instagram_caption" rows="2" placeholder="Catatan spot-check manual (opsional)..." class="w-full bg-black/40 border border-zinc-700 rounded p-2 text-gray-300 text-xs resize-none"></textarea>
                 </div>
               </div>
             </div>
@@ -265,6 +334,31 @@
               <div class="font-cyber text-3xl font-bold text-gray-400" id="statNeutral">-</div>
               <div class="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-2">Netral</div>
               <div class="text-[9px] text-gray-500/70 mt-1 italic">(Pertanyaan / Info)</div>
+            </div>
+          </div>
+
+          <!-- Weekly Summary & Negative Spike Alert -->
+          <div class="mt-6">
+            <h3 class="font-cyber text-xs tracking-widest text-cyber-cyan font-bold mb-3">RINGKASAN MINGGUAN & DETEKSI LONJAKAN NEGATIF</h3>
+            <div id="spikeAlertBanner" class="hidden mb-3 flex items-center gap-3 rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-3">
+              <svg class="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path></svg>
+              <p class="text-xs font-rajdhani text-red-300" id="spikeAlertText"></p>
+            </div>
+            <div class="overflow-x-auto rounded-xl border border-cyan-900/30">
+              <table class="w-full text-left font-rajdhani text-sm">
+                <thead class="bg-cyber-navy/50 text-gray-500 text-[10px] font-sans tracking-widest uppercase border-b border-gray-800">
+                  <tr>
+                    <th class="py-2 px-3 font-medium">Minggu</th>
+                    <th class="py-2 px-3 font-medium">Total</th>
+                    <th class="py-2 px-3 font-medium">Positif</th>
+                    <th class="py-2 px-3 font-medium">Negatif</th>
+                    <th class="py-2 px-3 font-medium">Netral</th>
+                    <th class="py-2 px-3 font-medium">Rasio Negatif</th>
+                    <th class="py-2 px-3 font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="weeklySummaryBody" class="divide-y divide-gray-800/50"></tbody>
+              </table>
             </div>
           </div>
 
