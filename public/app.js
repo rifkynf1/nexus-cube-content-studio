@@ -11,7 +11,6 @@ const editWhatsapp = document.getElementById("editWhatsapp");
 const editDiscord = document.getElementById("editDiscord");
 const editTwitter = document.getElementById("editTwitter");
 const editInstagram = document.getElementById("editInstagram");
-const calendarSuggestion = document.getElementById("calendarSuggestion");
 const exportBtn = document.getElementById("exportBtn");
 
 const loadSentimentBtn = document.getElementById("loadSentimentBtn");
@@ -66,10 +65,15 @@ generateBtn.addEventListener("click", async () => {
     editTwitter.value = threadArrayToText(twitter_thread);
     editInstagram.value = instagram_caption || "";
 
-    calendarSuggestion.innerHTML = calendar_suggestion
-      ? `<span class="font-display font-bold text-white">${calendar_suggestion.best_day}, ${calendar_suggestion.best_time}</span>
-         <span class="text-slate-400"> — ${calendar_suggestion.reasoning}</span>`
-      : "Tidak ada saran jadwal.";
+    // Jadwal upload disarankan, ditampilkan sebagai baris kecil di tiap kartu format.
+    ["whatsapp", "discord_telegram", "twitter_thread", "instagram_caption"].forEach((key) => {
+      const el = document.querySelector(`[data-schedule="${key}"]`);
+      if (!el) return;
+      const sched = calendar_suggestion && calendar_suggestion[key];
+      el.textContent = sched
+        ? `Upload: ${sched.day}, ${sched.date} pukul ${sched.time} WIB — ${sched.reasoning}`
+        : "";
+    });
 
     resultSection.classList.remove("hidden");
     resultSection.classList.add("flex");

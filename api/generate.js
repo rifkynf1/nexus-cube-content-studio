@@ -1,6 +1,18 @@
 const { generateJSON } = require('./_lib/gemini');
 const { loadRules, loadSamplePosts } = require('./_lib/loadContext');
 
+// Skema 1 rekomendasi jadwal upload (dipakai berulang untuk tiap format di calendar_suggestion).
+const SCHEDULE_ITEM_SCHEMA = {
+  type: 'object',
+  properties: {
+    date: { type: 'string', description: 'Tanggal upload, format YYYY-MM-DD, harus di masa depan relatif ke tanggal acuan.' },
+    day: { type: 'string', description: 'Nama hari dalam Bahasa Indonesia, mis. "Rabu".' },
+    time: { type: 'string', description: 'Jam upload, format HH:MM (24 jam), waktu Indonesia bagian barat (WIB).' },
+    reasoning: { type: 'string', description: 'Alasan konkret pemilihan tanggal & jam ini untuk platform tsb.' },
+  },
+  required: ['date', 'day', 'time', 'reasoning'],
+};
+
 // Skema output supaya Gemini selalu balas terstruktur,
 // mencakup 4 format konten + saran jadwal posting.
 const RESPONSE_SCHEMA = {
@@ -16,12 +28,14 @@ const RESPONSE_SCHEMA = {
     instagram_caption: { type: 'string' },
     calendar_suggestion: {
       type: 'object',
+      description: 'Jadwal UPLOAD/POSTING konten (bukan jadwal turnamen), terpisah per format.',
       properties: {
-        best_day: { type: 'string' },
-        best_time: { type: 'string' },
-        reasoning: { type: 'string' },
+        whatsapp: SCHEDULE_ITEM_SCHEMA,
+        discord_telegram: SCHEDULE_ITEM_SCHEMA,
+        twitter_thread: SCHEDULE_ITEM_SCHEMA,
+        instagram_caption: SCHEDULE_ITEM_SCHEMA,
       },
-      required: ['best_day', 'best_time', 'reasoning'],
+      required: ['whatsapp', 'discord_telegram', 'twitter_thread', 'instagram_caption'],
     },
   },
   required: ['whatsapp', 'discord_telegram', 'twitter_thread', 'instagram_caption', 'calendar_suggestion'],
@@ -30,6 +44,20 @@ const RESPONSE_SCHEMA = {
 function buildFewShotBlock(samplePosts) {
   if (!samplePosts.length) return '(Tidak ada data contoh tersedia.)';
   return samplePosts.map((row, i) => `Contoh #${i + 1} [format: ${row.format}, event: ${row.event}]:\n${row.content}`).join('\n\n---\n\n');
+}
+
+// Validasi kasar brief SEBELUM manggil Gemini sama sekali, supaya brief yang jelas
+// asal-asalan (terlalu pendek / cuma 1-2 kata) langsung ditolak dengan pasti - tidak
+// bergantung pada AI "mau nurut" instruksi di rules.md, yang sifatnya tidak selalu konsisten.
+const MIN_BRIEF_LENGTH = 12;
+const MIN_BRIEF_WORDS = 3;
+
+function isBriefTooVague(brief) {
+  const trimmed = brief.trim();
+  if (trimmed.length < MIN_BRIEF_LENGTH) return true;
+  const words = trimmed.split(/\s+/).filter((w) => w.length > 1);
+  if (words.length < MIN_BRIEF_WORDS) return true;
+  return false;
 }
 
 module.exports = async (req, res) => {
@@ -44,10 +72,20 @@ module.exports = async (req, res) => {
       res.status(400).json({ error: "Field 'brief' wajib diisi." });
       return;
     }
+    if (isBriefTooVague(brief)) {
+      res.status(400).json({
+        error: 'Brief terlalu singkat/kurang jelas. Tambahkan minimal info produk atau event yang mau dipromosikan, misal: nama event, tanggal, atau detail promo.',
+      });
+      return;
+    }
 
     const rules = loadRules();
     const samplePosts = loadSamplePosts();
     const fewShotBlock = buildFewShotBlock(samplePosts);
+
+    const now = new Date();
+    const todayDate = now.toISOString().slice(0, 10);
+    const todayDayName = now.toLocaleDateString('id-ID', { weekday: 'long', timeZone: 'Asia/Jakarta' });
 
     const prompt = `Berikut adalah contoh-contoh konten Nexus Cube sebelumnya (few-shot reference).
 Pelajari gaya, struktur, istilah gaming, dan nada bicaranya:
@@ -65,18 +103,28 @@ Tugasmu: buat konten promosi turnamen berdasarkan brief di atas dalam 4 format s
 3. Utas (thread) X/Twitter — array beberapa tweet berurutan, tweet pertama sebagai hook
 4. Caption Instagram (naratif & visual)
 
-Plus 1 saran jadwal posting (calendar_suggestion). Tentukan best_day & best_time dengan
-BERNALAR dari detail konkret yang ada di brief di atas (tanggal registrasi/match day/deadline
-yang disebutkan, jenis pengumuman, urgensi war tiket, dll) — JANGAN otomatis menjawab
-"Jumat, 19:00" atau jawaban template lain kalau tidak ada alasan spesifik dari brief yang
-mendukungnya. Pertimbangkan misalnya:
-- Kalau brief menyebut tanggal war tiket/registrasi/match day, jadwal posting idealnya
-  beberapa hari SEBELUM tanggal tersebut (H-3 s.d. H-1), bukan hari tetap.
-- Kalau brief tidak menyebut tanggal spesifik, pilih hari & jam berdasarkan jenis kontennya
-  (mis. pengumuman teknis vs hype promosi) dan jelaskan alasannya di field "reasoning" secara
-  konkret, bukan generik.
-- Variasikan hari/jam antar brief yang berbeda — dua brief dengan konteks berbeda seharusnya
-  bisa menghasilkan saran jadwal yang berbeda juga.
+Tanggal acuan hari ini (server, WIB): ${todayDate} (${todayDayName}). Semua tanggal yang kamu
+sarankan WAJIB berada di masa depan relatif ke tanggal acuan ini.
+
+Plus rekomendasi JADWAL UPLOAD/POSTING (calendar_suggestion) — ini BUKAN jadwal turnamen
+(match day/registrasi tetap fakta dari brief, jangan diubah), tapi kapan sebaiknya
+masing-masing dari 4 konten di atas di-upload/posting. Buat rekomendasi TERPISAH untuk
+whatsapp, discord_telegram, twitter_thread, dan instagram_caption — masing-masing dengan
+date (YYYY-MM-DD), day (nama hari), time (HH:MM), dan reasoning sendiri.
+
+Aturan supaya rekomendasi jadwal upload ini tidak template/asal sama tiap kali:
+- BERNALAR dari detail konkret di brief (tanggal war tiket/registrasi/match day yang
+  disebutkan) untuk menentukan tanggal upload — idealnya beberapa hari SEBELUM tanggal
+  acara tsb (H-3 s.d. H-1), bukan tanggal tetap yang selalu sama.
+- Waktu upload BOLEH beda antar platform sesuai karakter platform (mis. WhatsApp broadcast
+  malam saat orang santai cek HP, Instagram jam makan siang/malam saat engagement tinggi,
+  Discord saat komunitas biasanya aktif, X/Twitter bisa lebih pagi sebagai teaser sebelum
+  broadcast utama) — TAPI jangan ikuti pola ini secara membabi-buta tiap kali; kalau konteks
+  brief (mis. urgensi war tiket) lebih masuk akal untuk pola waktu yang beda, ikuti itu.
+- JANGAN kasih tanggal & jam yang persis sama di keempat platform kecuali memang ada alasan
+  kuat dari brief yang mendukungnya.
+- Dua brief dengan konteks berbeda harus menghasilkan rekomendasi jadwal upload yang berbeda
+  juga — jangan mengulang pola jawaban yang sama setiap kali diminta.
 
 Balas HANYA dalam format JSON sesuai schema yang diberikan.`;
 
