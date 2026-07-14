@@ -75,11 +75,8 @@ function clearApprovalStatuses() {
   Object.keys(approved).forEach((k) => (approved[k] = null));
   document.querySelectorAll("[data-spotcheck]").forEach((cb) => {
     cb.checked = false;
-    const key = cb.dataset.spotcheck;
-    setBtnLocked(document.querySelector(`[data-approve="${key}"]`), true);
-    setBtnLocked(document.querySelector(`[data-requires-spotcheck="${key}"]`), true);
-    const feedbackEl = document.querySelector(`[data-spotcheck-feedback="${key}"]`);
-    if (feedbackEl) feedbackEl.textContent = "";
+    cb.disabled = true; // verdict evaluasi lama sudah tidak relevan buat konten baru
+    syncSpotCheckVisual(cb.dataset.spotcheck);
   });
 }
 
@@ -230,19 +227,60 @@ document.querySelectorAll(".approve-btn").forEach((btn) => {
 // (bukan submit ke server - cuma state lokal browser, ikut tersimpan ke file .txt
 // begitu tombol Export diklik). Sengaja nonaktif sampai reviewer benar-benar
 // mencentang kotak ini, supaya tidak asal approve/copy tanpa direview.
-document.querySelectorAll("[data-spotcheck]").forEach((checkbox) => {
-  const key = checkbox.dataset.spotcheck;
+// checkbox.disabled = true berarti verdict evaluasi BELUM "approved" - spot-check tidak
+// boleh dicentang sampai konten benar-benar lolos evaluasi AI (kebijakan: perketat total).
+function syncSpotCheckVisual(key) {
+  const checkbox = document.querySelector(`[data-spotcheck="${key}"]`);
+  if (!checkbox) return;
+  const boxEl = checkbox.nextElementSibling;
   const feedbackEl = document.querySelector(`[data-spotcheck-feedback="${key}"]`);
   const approveBtn = document.querySelector(`[data-approve="${key}"]`);
   const copyBtn = document.querySelector(`[data-requires-spotcheck="${key}"]`);
 
-  checkbox.addEventListener("change", () => {
-    if (feedbackEl) {
-      feedbackEl.textContent = checkbox.checked ? "Tersimpan - akan ikut masuk saat kamu klik Export di bawah." : "";
-    }
-    setBtnLocked(approveBtn, !checkbox.checked);
-    setBtnLocked(copyBtn, !checkbox.checked);
-  });
+  if (boxEl) {
+    boxEl.classList.toggle("border-emerald-400", checkbox.checked);
+    boxEl.classList.toggle("bg-emerald-500/20", checkbox.checked);
+    boxEl.classList.toggle("opacity-40", checkbox.disabled);
+    boxEl.classList.toggle("cursor-not-allowed", checkbox.disabled);
+    const icon = boxEl.querySelector("svg");
+    if (icon) icon.classList.toggle("opacity-100", checkbox.checked);
+  }
+  if (feedbackEl) {
+    feedbackEl.textContent = checkbox.checked ? "Tersimpan - akan ikut masuk saat kamu klik Export di bawah." : "";
+  }
+  setBtnLocked(approveBtn, !checkbox.checked);
+  setBtnLocked(copyBtn, !checkbox.checked);
+}
+
+// Kunci checkbox spot-check dari awal (sebelum ada evaluasi sama sekali, verdict belum ada).
+document.querySelectorAll("[data-spotcheck]").forEach((checkbox) => {
+  checkbox.disabled = true;
+  const key = checkbox.dataset.spotcheck;
+  syncSpotCheckVisual(key);
+
+  // "change" cukup untuk interaksi normal, tapi "click" ditambah sebagai jaring pengaman
+  // supaya visual selalu ikut ter-update walau ada quirk render CSS peer-checked di browser.
+  checkbox.addEventListener("change", () => syncSpotCheckVisual(key));
+  checkbox.addEventListener("click", () => setTimeout(() => syncSpotCheckVisual(key), 0));
+
+  // Kalau checkbox lagi disabled (verdict belum approved) dan label-nya diklik, kasih tahu
+  // kenapa - checkbox disabled bawaan HTML tidak bisa memicu event apa pun di dirinya sendiri,
+  // makanya listener ini dipasang di elemen <label> pembungkusnya.
+  const label = checkbox.closest("label");
+  if (label) {
+    label.addEventListener("click", (e) => {
+      if (checkbox.disabled) {
+        e.preventDefault();
+        showAlert({
+          icon: "warning",
+          title: "Belum Bisa Dicentang",
+          text: `Klik "EVALUASI (AI JUDGE)" dulu dan pastikan hasilnya "APPROVED" sebelum human spot-check bisa dicentang untuk konten ${
+            formatLabels[key] || "ini"
+          }. Kalau hasilnya "NEEDS REVISION", perbaiki dulu kontennya lalu evaluasi ulang.`,
+        });
+      }
+    });
+  }
 });
 
 // ---- Copy buttons ----
@@ -335,6 +373,16 @@ document.querySelectorAll(".evaluate-btn").forEach((btn) => {
       verdictEl.textContent = isApproved ? "✔ APPROVED" : "✎ NEEDS REVISION";
       verdictEl.className = isApproved ? "text-emerald-400 font-bold" : "text-rose-400 font-bold";
       summaryEl.textContent = summary || "";
+
+      // Kebijakan diperketat: human spot-check cuma bisa dicentang kalau verdict AI "approved".
+      // Kalau "needs_revision" (skor rendah ATAU masih ada placeholder kosong), checkbox
+      // dikunci lagi (dan di-uncheck kalau sebelumnya sempat tercentang dari evaluasi lama).
+      const spotCheckbox = document.querySelector(`[data-spotcheck="${key}"]`);
+      if (spotCheckbox) {
+        spotCheckbox.disabled = !isApproved;
+        if (!isApproved) spotCheckbox.checked = false;
+        syncSpotCheckVisual(key);
+      }
 
       panel.classList.remove("hidden");
     } catch (err) {
