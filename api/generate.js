@@ -119,6 +119,25 @@ function isBriefPromptInjection(brief) {
   return INJECTION_KEYWORDS.some((k) => t.includes(k));
 }
 
+// Bersihkan dash sebagai penyambung kalimat (mis. "kata - kata"), ciri khas tulisan AI.
+// Butuh non-spasi sebelum spasi-dash-spasi supaya bullet list ("- Info: ...") dan rentang
+// tanggal/angka tanpa spasi (mis. "18-25 Juli") tidak ikut kena, hanya diganti koma.
+function stripConnectorDashes(text) {
+  if (typeof text !== 'string') return text;
+  return text.replace(/(\S)[ \t]+[-–—][ \t]+(?=\S)/g, '$1, ');
+}
+
+function sanitizeGeneratedContent(result) {
+  if (!result) return result;
+  if (typeof result.whatsapp === 'string') result.whatsapp = stripConnectorDashes(result.whatsapp);
+  if (typeof result.discord_telegram === 'string') result.discord_telegram = stripConnectorDashes(result.discord_telegram);
+  if (typeof result.instagram_caption === 'string') result.instagram_caption = stripConnectorDashes(result.instagram_caption);
+  if (Array.isArray(result.twitter_thread)) {
+    result.twitter_thread = result.twitter_thread.map(stripConnectorDashes);
+  }
+  return result;
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed. Gunakan POST.' });
@@ -221,6 +240,11 @@ baik-baik, ini sering dilanggar):
   seperti struktur di contoh few-shot.
 - Untuk twitter_thread, tiap elemen array adalah 1 tweet - jangan gabungkan beberapa tweet
   jadi 1 elemen string panjang.
+- JANGAN pakai tanda strip (-) atau dash panjang (—) sebagai penyambung antar kalimat/klausa
+  (contoh yang SALAH: "War tiket dibuka - jangan sampai kehabisan slot"). Ganti dengan titik,
+  koma, kalimat baru, atau emoji bullet. Tanda hubung untuk rentang tanggal/angka (mis.
+  "18-25 Juli") atau bullet list Discord tetap boleh, yang dilarang cuma dash sebagai
+  penyambung kalimat.
 
 ATURAN ANTI-REPETISI ANTAR FORMAT (penting, sering dilanggar): keempat format JANGAN cuma
 saling tempel-ulang info yang sama dengan kalimat pembuka beda tipis - itu bikin hasilnya
@@ -281,6 +305,8 @@ Balas HANYA dalam format JSON sesuai schema yang diberikan.`;
       });
       return;
     }
+
+    sanitizeGeneratedContent(result);
 
     // Hitung ulang nama hari dari tanggal (bukan percaya mentah-mentah ke AI) supaya
     // tidak ada kasus AI salah sebut hari - misal bilang tanggalnya Rabu padahal
