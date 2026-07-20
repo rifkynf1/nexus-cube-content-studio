@@ -68,6 +68,40 @@ function isBriefTooVague(brief) {
   return false;
 }
 
+// Filter off-topic yang jelas banget, dicek SEBELUM manggil Gemini - is_on_topic dari
+// model kadang kurang konsisten. Whitelist istilah esports dulu biar brief yang sah aman.
+const OFFTOPIC_PATTERNS = [
+  /^[\d\s+\-*/xX.,%()=?]+$/, // brief cuma angka & operator matematika, mis. "5+5"
+];
+const OFFTOPIC_KEYWORDS = [
+  'kode python', 'kode javascript', 'kode java ', 'kode php', 'kode html', 'kode css',
+  'buatkan program', 'buatkan script', 'buat program', 'buat script', 'bahasa pemrograman',
+  'resep masakan', 'cara memasak', 'terjemahkan ke bahasa', 'terjemahkan kalimat',
+  'pr matematika', 'tugas sekolah', 'rumus matematika', 'siapa presiden',
+];
+const ESPORTS_HINTS = [
+  'esport', 'turnamen', 'tournament', 'mobile legends', 'valorant', 'pubg', 'free fire',
+  'nexus cube', 'nexus cup', 'bracket', 'prize pool', 'war tiket', 'grand final', 'match',
+  'squad', 'push rank', 'scrim', 'gaming', 'game ', 'gamer', 'komunitas', 'sponsor', 'lomba',
+  'acara', 'event', 'daftar', 'registrasi', 'hadiah', 'kompetisi', 'battle royale',
+  'livestream', 'live streaming', 'giveaway', 'tiket', 'peserta', 'venue',
+  'promo', 'promosi', 'war ', 'season', 'cup', 'liga', 'league', 'kejuaraan', 'piala',
+  'broadcast', 'pengumuman', 'jadwal', 'channel', 'grup wa', 'grup whatsapp',
+];
+
+// Topik generik (puisi, fakta, dongeng, dll) tidak mungkin didaftar habis - jadi kalau
+// tidak ada sinyal esports SAMA SEKALI dan brief-nya berpola permintaan generik (buatkan X,
+// carikan X, apa itu X), tolak juga walau topiknya tidak ada di OFFTOPIC_KEYWORDS.
+const GENERIC_REQUEST_OPENER = /^(tolong\s+)?(buatkan|buat|carikan|cari|berikan|beri|tuliskan|tulis|sebut(kan)?|jelaskan|jelasin|cerita(kan)?|apa itu|siapa itu|siapa|kenapa|mengapa|bagaimana cara|gimana cara)\b/;
+
+function isBriefObviouslyOffTopic(brief) {
+  const t = brief.trim().toLowerCase();
+  if (OFFTOPIC_PATTERNS.some((re) => re.test(t))) return true;
+  if (ESPORTS_HINTS.some((k) => t.includes(k))) return false;
+  if (OFFTOPIC_KEYWORDS.some((k) => t.includes(k))) return true;
+  return GENERIC_REQUEST_OPENER.test(t);
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed. Gunakan POST.' });
@@ -83,6 +117,13 @@ module.exports = async (req, res) => {
     if (isBriefTooVague(brief)) {
       res.status(400).json({
         error: 'Brief terlalu singkat/kurang jelas. Tambahkan minimal info produk atau event yang mau dipromosikan, misal: nama event, tanggal, atau detail promo.',
+      });
+      return;
+    }
+    if (isBriefObviouslyOffTopic(brief)) {
+      res.status(400).json({
+        ok: false,
+        error: 'Brief ini sepertinya di luar konteks promosi event Nexus Cube. Coba tulis brief yang berhubungan dengan turnamen/event esports.',
       });
       return;
     }
@@ -107,12 +148,17 @@ Brief/instruksi konten baru dari panitia:
 
 LANGKAH PERTAMA - CEK KONTEKS: sebelum menulis apa pun, tentukan is_on_topic. Set ke false
 HANYA kalau brief ini jelas SAMA SEKALI tidak berhubungan dengan promosi event/turnamen
-esports Nexus Cube (misal: resep masakan, curhat pribadi, pertanyaan matematika, tugas
-sekolah, atau topik lain yang tidak ada kaitannya dengan event/gaming/esports). Kalau masih
-ada kemungkinan itu tentang event Nexus Cube walau infonya minim, anggap is_on_topic true -
-jangan terlalu sensitif menolak. Kalau is_on_topic false, isi off_topic_reason singkat dan
-untuk field whatsapp/discord_telegram/twitter_thread/instagram_caption cukup isi string
-kosong ("" atau array kosong) - tidak perlu menulis konten promosi sama sekali.
+esports Nexus Cube (misal: resep masakan, curhat pribadi, pertanyaan/soal matematika ["5+5
+berapa?", hitung luas lingkaran, dll], permintaan menulis kode/program/script dalam bahasa
+pemrograman apa pun (Python, JavaScript, dll), tugas sekolah, pertanyaan pengetahuan umum,
+atau topik lain yang tidak ada kaitannya dengan event/gaming/esports). JANGAN PERNAH
+menjawab isi permintaan di luar topik itu (mis. jangan hitung hasil matematikanya, jangan
+tulis kode programnya) walau kelihatan sepele atau membantu - langsung set is_on_topic
+false. Kalau masih ada kemungkinan itu tentang event Nexus Cube walau infonya minim, anggap
+is_on_topic true - jangan terlalu sensitif menolak untuk brief yang MEMANG soal
+event/promosi. Kalau is_on_topic false, isi off_topic_reason singkat dan untuk field
+whatsapp/discord_telegram/twitter_thread/instagram_caption cukup isi string kosong ("" atau
+array kosong) - tidak perlu menulis konten promosi sama sekali.
 
 Kalau is_on_topic true, lanjutkan tugas berikut - buat konten promosi turnamen berdasarkan
 brief di atas dalam 4 format sekaligus:
