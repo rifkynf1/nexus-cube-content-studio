@@ -77,14 +77,6 @@ function findOverpromiseViolations(text) {
   return [...new Set(hits)];
 }
 
-const SCREAMING_TEXT_ALLOWLIST = new Set(["CTA", "GG", "WA", "IG", "VIP", "EO", "FAQ", "MLBB"]);
-const SCREAMING_TEXT_MAX = 2;
-
-function countScreamingWords(text) {
-  const tokens = text.match(/\b[A-Z]{3,}\b/g) || [];
-  return tokens.filter((t) => !SCREAMING_TEXT_ALLOWLIST.has(t));
-}
-
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed. Gunakan POST." });
@@ -157,14 +149,6 @@ harus persis salah satu dari: ${RUBRIC_CRITERIA.map((c) => `"${c.key}"`).join(",
         result.verdict = "needs_revision";
         result.overpromise_violations = overpromise;
         result.summary = `${result.summary || ""} Catatan tambahan: konten ini mengandung klaim overpromise/tidak bisa dipastikan (${overpromise.join(", ")}) yang dilarang di hard rules - verdict otomatis diturunkan ke "needs_revision".`.trim();
-      }
-
-      const screaming = countScreamingWords(contentText);
-      if (screaming.length > SCREAMING_TEXT_MAX) {
-        result.verdict = "needs_revision";
-        const uniqueScreaming = [...new Set(screaming)];
-        result.screaming_text_violations = uniqueScreaming;
-        result.summary = `${result.summary || ""} Catatan tambahan: konten ini punya ${screaming.length} kata SCREAMING TEXT (${uniqueScreaming.join(", ")}), maks ${SCREAMING_TEXT_MAX} kata penekanan - verdict otomatis diturunkan ke "needs_revision".`.trim();
       }
     }
 

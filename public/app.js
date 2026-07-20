@@ -414,7 +414,7 @@ document.querySelectorAll(".evaluate-btn").forEach((btn) => {
       const payload = await res.json();
       if (!res.ok || !payload.ok) throw new Error(payload.error || "Gagal mengevaluasi konten.");
 
-      const { criteria, overall_score, verdict, summary, unfilled_placeholders, overpromise_violations, screaming_text_violations } = payload.data;
+      const { criteria, overall_score, verdict, summary, unfilled_placeholders, overpromise_violations } = payload.data;
 
       criteriaEl.innerHTML = (criteria || [])
         .map(
@@ -438,7 +438,6 @@ document.querySelectorAll(".evaluate-btn").forEach((btn) => {
         const groups = [
           { label: "Placeholder belum diisi", items: unfilled_placeholders },
           { label: "Klaim overpromise", items: overpromise_violations },
-          { label: "SCREAMING TEXT", items: screaming_text_violations },
         ].filter((g) => g.items && g.items.length);
 
         violationsEl.innerHTML = groups
