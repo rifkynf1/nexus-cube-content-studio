@@ -84,9 +84,7 @@ function clearApprovalStatuses() {
 // Kunci semua tombol Setujui & Copy sejak awal load (sebelum ada evaluasi/spot-check).
 document.querySelectorAll(".approve-btn, [data-requires-spotcheck]").forEach((btn) => setBtnLocked(btn, true));
 
-// Tampilkan jadwal upload di badge tiap kartu. Dipisah jadi fungsi sendiri (bukan cuma
-// inline di dalam generateBtn) supaya bisa dipanggil ulang setelah placeholder diisi,
-// karena badge ini render dari state currentCalendarSuggestion, bukan dari textarea.
+// Render badge jadwal upload dari currentCalendarSuggestion, bisa dipanggil ulang.
 function renderScheduleBadges() {
   ["whatsapp", "discord_telegram", "twitter_thread", "instagram_caption"].forEach((key) => {
     const el = document.querySelector(`[data-schedule="${key}"]`);
@@ -110,8 +108,7 @@ function threadTextToArray(text) {
   return text.split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean);
 }
 
-// Parser tanggal fleksibel untuk nilai yang diketik user di panel "Isi Placeholder"
-// (format bebas: "2026-08-20", "20/08/2026", atau "20 Agustus 2026").
+// Parser tanggal fleksibel: "2026-08-20", "20/08/2026", atau "20 Agustus 2026".
 const ID_MONTHS = {
   januari: 0, februari: 1, maret: 2, april: 3, mei: 4, juni: 5,
   juli: 6, agustus: 7, september: 8, oktober: 9, november: 10, desember: 11,
@@ -130,41 +127,35 @@ function parseFlexibleDate(str) {
   return null;
 }
 
-// Waktu upload default per platform, dipakai untuk rekomendasi otomatis di client
-// (tanpa perlu generate ulang lewat AI) saat tanggal event baru saja diisi lewat
-// panel "Isi Placeholder".
-const DEFAULT_UPLOAD_TIME = {
-  whatsapp: "19:00",
-  discord_telegram: "17:00",
-  twitter_thread: "09:00",
-  instagram_caption: "12:00",
+// H- per platform (bukan seragam) - strategi bertahap: Twitter teaser paling awal,
+// Instagram reminder terakhir paling dekat ke tanggal registrasi.
+const UPLOAD_SCHEDULE_DEFAULTS = {
+  twitter_thread: { daysBefore: 4, time: "09:00" },
+  discord_telegram: { daysBefore: 3, time: "17:00" },
+  whatsapp: { daysBefore: 2, time: "19:00" },
+  instagram_caption: { daysBefore: 1, time: "12:00" },
 };
-const UPLOAD_DAYS_BEFORE_EVENT = 2;
 
-// Hitung ulang calendar_suggestion begitu ada tanggal event valid yang baru diisi.
-// Dipakai tanggal event PALING AWAL dari semua placeholder tanggal yang berhasil
-// diisi (biasanya tanggal registrasi), supaya konten sempat diupload sebelum acara.
+// Dihitung dari tanggal event PALING AWAL yang diisi (biasanya tanggal registrasi).
 function recomputeCalendarFromFilledDates(filledDates) {
   const validDates = filledDates.map(parseFlexibleDate).filter((d) => d && !Number.isNaN(d.getTime()));
   if (!validDates.length) return;
   const earliest = validDates.reduce((min, d) => (d < min ? d : min));
-
-  const uploadDate = new Date(earliest);
-  uploadDate.setDate(uploadDate.getDate() - UPLOAD_DAYS_BEFORE_EVENT);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  if (uploadDate < today) uploadDate.setTime(today.getTime() + 24 * 60 * 60 * 1000);
-
-  const dateStr = `${uploadDate.getFullYear()}-${String(uploadDate.getMonth() + 1).padStart(2, "0")}-${String(uploadDate.getDate()).padStart(2, "0")}`;
-  const dayStr = uploadDate.toLocaleDateString("id-ID", { weekday: "long" });
 
   currentCalendarSuggestion = currentCalendarSuggestion || {};
-  ["whatsapp", "discord_telegram", "twitter_thread", "instagram_caption"].forEach((key) => {
+  Object.entries(UPLOAD_SCHEDULE_DEFAULTS).forEach(([key, { daysBefore, time }]) => {
+    const uploadDate = new Date(earliest);
+    uploadDate.setDate(uploadDate.getDate() - daysBefore);
+    if (uploadDate < today) uploadDate.setTime(today.getTime() + 24 * 60 * 60 * 1000);
+
+    const dateStr = `${uploadDate.getFullYear()}-${String(uploadDate.getMonth() + 1).padStart(2, "0")}-${String(uploadDate.getDate()).padStart(2, "0")}`;
     currentCalendarSuggestion[key] = {
       date: dateStr,
-      day: dayStr,
-      time: DEFAULT_UPLOAD_TIME[key],
-      reasoning: `Rekomendasi otomatis (H-${UPLOAD_DAYS_BEFORE_EVENT}) dihitung dari tanggal event yang baru diisi. Klik "GENERATE KONTEN" ulang kalau butuh rekomendasi yang lebih spesifik sesuai konteks brief.`,
+      day: uploadDate.toLocaleDateString("id-ID", { weekday: "long" }),
+      time,
+      reasoning: `Rekomendasi otomatis (H-${daysBefore}) dihitung dari tanggal event yang baru diisi. Klik "GENERATE KONTEN" ulang kalau butuh rekomendasi yang lebih spesifik sesuai konteks brief.`,
     };
   });
 }
@@ -179,12 +170,8 @@ function scanPlaceholders() {
     const matches = ta.value.match(/\[([^\[\]]+)\]/g) || [];
     matches.forEach((m) => found.add(m.slice(1, -1)));
   });
-  // Jadwal upload (badge, bukan textarea) juga bisa berisi placeholder seperti
-  // [TANGGAL MENYUSUL] kalau brief belum sebut tanggal event - ikut discan juga.
-  Object.values(currentCalendarSuggestion || {}).forEach((sched) => {
-    const matches = (sched.date || "").match(/\[([^\[\]]+)\]/g) || [];
-    matches.forEach((m) => found.add(m.slice(1, -1)));
-  });
+  // [TANGGAL MENYUSUL] di badge jadwal upload sengaja tidak ikut discan - otomatis
+  // kehitung ulang lewat recomputeCalendarFromFilledDates, bukan diisi manual.
 
   if (!found.size) {
     placeholderPanel.classList.add("hidden");
@@ -219,20 +206,6 @@ applyPlaceholdersBtn.addEventListener("click", () => {
       ta.value = ta.value.split(token).join(value);
     });
 
-    // Kalau token yang sama juga muncul di tanggal jadwal upload (mis. [TANGGAL
-    // MENYUSUL]), ganti juga supaya badge-nya ikut update, bukan cuma textarea.
-    Object.values(currentCalendarSuggestion || {}).forEach((sched) => {
-      if (!sched.date || !sched.date.includes(token)) return;
-      sched.date = sched.date.split(token).join(value);
-      const parsed = new Date(`${sched.date}T00:00:00`);
-      sched.day = Number.isNaN(parsed.getTime())
-        ? ""
-        : parsed.toLocaleDateString("id-ID", { weekday: "long", timeZone: "Asia/Jakarta" });
-    });
-
-    // Kumpulkan nilai dari placeholder yang berkaitan sama tanggal event (mis.
-    // [TANGGAL REGISTRASI], [TANGGAL MATCH DAY]) supaya rekomendasi upload bisa
-    // dihitung ulang otomatis, tidak perlu generate ulang lewat AI.
     if (/tanggal/i.test(name)) filledDateValues.push(value);
   });
   if (filledDateValues.length) recomputeCalendarFromFilledDates(filledDateValues);
