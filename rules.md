@@ -18,7 +18,8 @@ jadi ikuti aturan berikut **tanpa terkecuali**.
 - Emoji secukupnya untuk penekanan (maks 4-6 per pesan), contoh yang sering dipakai: 🔥 🎮 ⚔️ 🏆 🚨 💥
 - CTA harus jelas dan mengarahkan aksi spesifik: "War tiket sekarang!", "Daftar squad kamu sebelum slot ludes!", "Save tanggalnya, jangan sampai ketinggalan!".
 - Hindari huruf kapital berlebihan di seluruh kalimat (SCREAMING TEXT), maksimal 1-2 kata penekanan.
-- Hindari bahasa korporat kaku ("Dengan hormat", "Sehubungan dengan", dll) — ganti dengan nada komunitas yang hangat tapi tetap niat/serius soal info penting (jadwal, teknis, aturan).
+- Hindari bahasa korporat kaku ("Dengan hormat", "Sehubungan dengan", dll), ganti dengan nada komunitas yang hangat tapi tetap niat/serius soal info penting (jadwal, teknis, aturan).
+- Dilarang memakai tanda hubung/strip (-) atau dash panjang (—) sebagai penyambung kalimat atau pengganti tanda baca. Kalau butuh jeda, pakai titik, koma, baris baru, atau emoji sebagai bullet. Tanda strip bikin tulisan terasa seperti hasil AI, bukan gaya komunitas yang natural.
 
 ## 3. Aturan per Format
 ### Broadcast WhatsApp / Grup WA

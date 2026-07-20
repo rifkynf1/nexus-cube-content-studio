@@ -102,6 +102,23 @@ function isBriefObviouslyOffTopic(brief) {
   return GENERIC_REQUEST_OPENER.test(t);
 }
 
+// Deteksi upaya prompt injection langsung di kode, jangan cuma andalkan kepatuhan Gemini
+// ke rules.md (kadang brief tetap diproses walau isinya minta ganti persona/format output).
+const INJECTION_KEYWORDS = [
+  'abaikan instruksi', 'abaikan aturan', 'abaikan semua instruksi', 'ignore previous instructions',
+  'ignore all previous', 'lupakan instruksi', 'lupakan aturan', 'jangan ikuti aturan',
+  'ubah persona', 'ganti persona', 'kamu adalah asisten umum', 'kamu sekarang adalah',
+  'bocorkan system instruction', 'keluarkan system instruction', 'apa isi rules.md',
+  'tunjukkan rules.md', 'tunjukkan system prompt', 'system prompt kamu', 'reveal your instructions',
+  'jangan dalam format json', 'jangan pakai format json', 'tanpa format json', 'bukan format json',
+  'tulis biasa saja', 'balas tanpa json', 'act as', 'you are now',
+];
+
+function isBriefPromptInjection(brief) {
+  const t = brief.trim().toLowerCase();
+  return INJECTION_KEYWORDS.some((k) => t.includes(k));
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed. Gunakan POST.' });
@@ -124,6 +141,13 @@ module.exports = async (req, res) => {
       res.status(400).json({
         ok: false,
         error: 'Brief ini sepertinya di luar konteks promosi event Nexus Cube. Coba tulis brief yang berhubungan dengan turnamen/event esports.',
+      });
+      return;
+    }
+    if (isBriefPromptInjection(brief)) {
+      res.status(400).json({
+        ok: false,
+        error: 'Brief ini terdeteksi berisi upaya mengubah instruksi sistem. Tulis brief yang murni berisi info event/turnamen tanpa instruksi tambahan ke AI.',
       });
       return;
     }
@@ -180,10 +204,12 @@ ATURAN ANTI-MENGARANG (PALING PENTING, sering dilanggar - baca sampai habis):
   SEMUA angka itu tidak ada di brief, jadi SEMUA itu salah dan harus jadi placeholder.
 - Sebaliknya: info yang MEMANG disebutkan di brief (misal brief bilang "prize pool
   Rp20.000.000") WAJIB ditulis apa adanya, jangan diubah jadi placeholder juga.
-- Aturan yang sama berlaku untuk field date/time di calendar_suggestion: kalau kamu perlu
-  tanggal event (match day/registrasi) untuk bernalar soal jadwal upload tapi brief tidak
-  menyebutkannya, jangan mengarang tanggal event - cukup pilih jadwal upload yang masuk akal
-  berdasarkan info yang memang tersedia.
+- Aturan yang sama berlaku untuk calendar_suggestion. Kalau brief menyebutkan tanggal event
+  (match day/registrasi/war tiket), tentukan tanggal upload yang masuk akal beberapa hari
+  SEBELUM tanggal itu. TAPI kalau brief SAMA SEKALI TIDAK menyebutkan tanggal event apa pun,
+  JANGAN mengarang tanggal upload sendiri. Isi field date dengan placeholder eksplisit
+  "[TANGGAL MENYUSUL]", field day dan time boleh string kosong (""), dan reasoning jelaskan
+  bahwa tanggal upload belum bisa ditentukan karena brief belum menyebutkan tanggal acara.
 
 ATURAN FORMATTING WAJIB untuk whatsapp, discord_telegram, dan instagram_caption (perhatikan
 baik-baik, ini sering dilanggar):
