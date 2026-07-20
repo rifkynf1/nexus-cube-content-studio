@@ -110,6 +110,65 @@ function threadTextToArray(text) {
   return text.split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean);
 }
 
+// Parser tanggal fleksibel untuk nilai yang diketik user di panel "Isi Placeholder"
+// (format bebas: "2026-08-20", "20/08/2026", atau "20 Agustus 2026").
+const ID_MONTHS = {
+  januari: 0, februari: 1, maret: 2, april: 3, mei: 4, juni: 5,
+  juli: 6, agustus: 7, september: 8, oktober: 9, november: 10, desember: 11,
+};
+function parseFlexibleDate(str) {
+  if (!str) return null;
+  const s = str.trim();
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+  m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if (m) return new Date(+m[3], +m[2] - 1, +m[1]);
+  m = s.match(/^(\d{1,2})\s+([a-zA-Z]+)\s+(\d{4})$/);
+  if (m && ID_MONTHS[m[2].toLowerCase()] !== undefined) {
+    return new Date(+m[3], ID_MONTHS[m[2].toLowerCase()], +m[1]);
+  }
+  return null;
+}
+
+// Waktu upload default per platform, dipakai untuk rekomendasi otomatis di client
+// (tanpa perlu generate ulang lewat AI) saat tanggal event baru saja diisi lewat
+// panel "Isi Placeholder".
+const DEFAULT_UPLOAD_TIME = {
+  whatsapp: "19:00",
+  discord_telegram: "17:00",
+  twitter_thread: "09:00",
+  instagram_caption: "12:00",
+};
+const UPLOAD_DAYS_BEFORE_EVENT = 2;
+
+// Hitung ulang calendar_suggestion begitu ada tanggal event valid yang baru diisi.
+// Dipakai tanggal event PALING AWAL dari semua placeholder tanggal yang berhasil
+// diisi (biasanya tanggal registrasi), supaya konten sempat diupload sebelum acara.
+function recomputeCalendarFromFilledDates(filledDates) {
+  const validDates = filledDates.map(parseFlexibleDate).filter((d) => d && !Number.isNaN(d.getTime()));
+  if (!validDates.length) return;
+  const earliest = validDates.reduce((min, d) => (d < min ? d : min));
+
+  const uploadDate = new Date(earliest);
+  uploadDate.setDate(uploadDate.getDate() - UPLOAD_DAYS_BEFORE_EVENT);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (uploadDate < today) uploadDate.setTime(today.getTime() + 24 * 60 * 60 * 1000);
+
+  const dateStr = `${uploadDate.getFullYear()}-${String(uploadDate.getMonth() + 1).padStart(2, "0")}-${String(uploadDate.getDate()).padStart(2, "0")}`;
+  const dayStr = uploadDate.toLocaleDateString("id-ID", { weekday: "long" });
+
+  currentCalendarSuggestion = currentCalendarSuggestion || {};
+  ["whatsapp", "discord_telegram", "twitter_thread", "instagram_caption"].forEach((key) => {
+    currentCalendarSuggestion[key] = {
+      date: dateStr,
+      day: dayStr,
+      time: DEFAULT_UPLOAD_TIME[key],
+      reasoning: `Rekomendasi otomatis (H-${UPLOAD_DAYS_BEFORE_EVENT}) dihitung dari tanggal event yang baru diisi. Klik "GENERATE KONTEN" ulang kalau butuh rekomendasi yang lebih spesifik sesuai konteks brief.`,
+    };
+  });
+}
+
 // ---- Deteksi placeholder yang belum diisi (mis. [NAMA VENUE], [LINK INFO]) ----
 // Cari semua "[XXX]" di 4 textarea, kumpulkan nama placeholder yang unik, lalu tampilkan
 // input kecil per placeholder supaya bisa diisi & diganti langsung (find-and-replace,
@@ -150,6 +209,7 @@ function scanPlaceholders() {
 
 applyPlaceholdersBtn.addEventListener("click", () => {
   const inputs = placeholderInputs.querySelectorAll("[data-placeholder-input]");
+  const filledDateValues = [];
   inputs.forEach((input) => {
     const value = input.value.trim();
     if (!value) return;
@@ -169,7 +229,13 @@ applyPlaceholdersBtn.addEventListener("click", () => {
         ? ""
         : parsed.toLocaleDateString("id-ID", { weekday: "long", timeZone: "Asia/Jakarta" });
     });
+
+    // Kumpulkan nilai dari placeholder yang berkaitan sama tanggal event (mis.
+    // [TANGGAL REGISTRASI], [TANGGAL MATCH DAY]) supaya rekomendasi upload bisa
+    // dihitung ulang otomatis, tidak perlu generate ulang lewat AI.
+    if (/tanggal/i.test(name)) filledDateValues.push(value);
   });
+  if (filledDateValues.length) recomputeCalendarFromFilledDates(filledDateValues);
   renderScheduleBadges();
   scanPlaceholders();
 });
