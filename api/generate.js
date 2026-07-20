@@ -127,6 +127,20 @@ function stripConnectorDashes(text) {
   return text.replace(/(\S)[ \t]+[-–—][ \t]+(?=\S)/g, '$1, ');
 }
 
+// Cek dari BRIEF ASLI (bukan dari output AI) apakah ada tanggal beneran disebutkan.
+// Perlu ini karena AI kadang tetap mengarang tanggal upload yang valid (mis. "2026-07-22")
+// alih-alih memakai placeholder [TANGGAL MENYUSUL] seperti diminta - jadi tidak bisa cuma
+// mengecek apakah field date-nya "kelihatan seperti tanggal", harus dicek independen dari brief.
+const DATE_MENTION_PATTERNS = [
+  /\b20\d{2}\b/, // tahun eksplisit, mis. "2026"
+  /\b\d{1,2}\s+(januari|februari|maret|april|mei|juni|juli|agustus|september|oktober|november|desember)\b/i,
+  /\b\d{1,2}[\/\-]\d{1,2}([\/\-]\d{2,4})?\b/, // format DD/MM atau DD-MM(-YYYY)
+];
+
+function briefMentionsDate(brief) {
+  return DATE_MENTION_PATTERNS.some((re) => re.test(brief));
+}
+
 function sanitizeGeneratedContent(result) {
   if (!result) return result;
   if (typeof result.whatsapp === 'string') result.whatsapp = stripConnectorDashes(result.whatsapp);
@@ -316,18 +330,21 @@ Balas HANYA dalam format JSON sesuai schema yang diberikan.`;
 
     // Hitung ulang nama hari dari tanggal (bukan percaya mentah-mentah ke AI) supaya
     // tidak ada kasus AI salah sebut hari - misal bilang tanggalnya Rabu padahal
-    // tanggal itu sebenarnya jatuh di hari Kamis. Kalau date-nya bukan tanggal asli
-    // (masih placeholder [TANGGAL MENYUSUL] karena brief belum sebut tanggal event),
-    // paksa day & time ikut kosong juga - AI kadang tetap ngarang jam spesifik (mis.
-    // "19:00") walau tanggalnya sendiri belum diketahui, itu ikut hallucination juga.
+    // tanggal itu sebenarnya jatuh di hari Kamis. Kalau brief SAMA SEKALI tidak sebut
+    // tanggal apa pun, paksa seluruh calendar_suggestion ke placeholder - JANGAN cuma
+    // cek apakah field date dari AI "kelihatan seperti tanggal", karena AI kadang tetap
+    // mengarang tanggal upload yang valid (mis. "2026-07-22") alih-alih memakai
+    // placeholder [TANGGAL MENYUSUL] seperti diminta.
+    const hasDateInBrief = briefMentionsDate(brief);
     if (result && result.calendar_suggestion) {
       for (const key of Object.keys(result.calendar_suggestion)) {
         const item = result.calendar_suggestion[key];
         if (!item) continue;
-        const parsed = item.date ? new Date(`${item.date}T00:00:00`) : null;
+        const parsed = hasDateInBrief && item.date ? new Date(`${item.date}T00:00:00`) : null;
         if (parsed && !Number.isNaN(parsed.getTime())) {
           item.day = parsed.toLocaleDateString('id-ID', { weekday: 'long', timeZone: 'Asia/Jakarta' });
         } else {
+          item.date = '[TANGGAL MENYUSUL]';
           item.day = '';
           item.time = '';
           // Reasoning dari AI kadang tetap kedengaran seolah ada rekomendasi (mis.
