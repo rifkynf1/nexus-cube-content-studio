@@ -62,8 +62,11 @@ function findUnfilledPlaceholders(text) {
 }
 
 const OVERPROMISE_PATTERNS = [
-  /dijamin\s+(menang|juara|naik\s*rank|masuk\s*final)/i,
+  /dijamin\s+(menang|juara|masuk\s*final)/i,
   /pasti\s+(menang|juara)/i,
+  /(dijamin|pasti|terjamin)[^.!?\n]{0,20}\bnaik\b[^.!?\n]{0,15}\brank\b/i,
+  /\brank\b[^.!?\n]{0,20}(dijamin|pasti|terjamin)[^.!?\n]{0,15}\bnaik\b/i,
+  /\bnaik\b[^.!?\n]{0,20}\brank\b[^.!?\n]{0,15}(dijamin|pasti|terjamin)/i,
   /100%\s*(tanpa|no)\s*lag/i,
   /tanpa\s*lag\s*sama\s*sekali/i,
   /(server|koneksi)\s*(pasti|dijamin)?\s*(tidak|gak|nggak)\s*(bakal|akan)?\s*(nge)?lag/i,
@@ -159,8 +162,9 @@ harus persis salah satu dari: ${RUBRIC_CRITERIA.map((c) => `"${c.key}"`).join(",
       const screaming = countScreamingWords(contentText);
       if (screaming.length > SCREAMING_TEXT_MAX) {
         result.verdict = "needs_revision";
-        result.screaming_text_violations = [...new Set(screaming)];
-        result.summary = `${result.summary || ""} Catatan tambahan: konten ini punya ${screaming.length} kata SCREAMING TEXT (maks ${SCREAMING_TEXT_MAX} kata penekanan) - verdict otomatis diturunkan ke "needs_revision".`.trim();
+        const uniqueScreaming = [...new Set(screaming)];
+        result.screaming_text_violations = uniqueScreaming;
+        result.summary = `${result.summary || ""} Catatan tambahan: konten ini punya ${screaming.length} kata SCREAMING TEXT (${uniqueScreaming.join(", ")}), maks ${SCREAMING_TEXT_MAX} kata penekanan - verdict otomatis diturunkan ke "needs_revision".`.trim();
       }
     }
 

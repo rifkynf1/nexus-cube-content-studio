@@ -70,6 +70,20 @@ function clearApprovalStatuses() {
     cb.disabled = true;
     syncSpotCheckVisual(cb.dataset.spotcheck);
   });
+  document.querySelectorAll("[data-eval-panel]").forEach((panel) => {
+    panel.classList.add("hidden");
+    const key = panel.dataset.evalPanel;
+    const criteriaEl = document.querySelector(`[data-eval-criteria="${key}"]`);
+    const overallEl = document.querySelector(`[data-eval-overall="${key}"]`);
+    const verdictEl = document.querySelector(`[data-eval-verdict="${key}"]`);
+    const summaryEl = document.querySelector(`[data-eval-summary="${key}"]`);
+    const violationsEl = document.querySelector(`[data-eval-violations="${key}"]`);
+    if (criteriaEl) criteriaEl.innerHTML = "";
+    if (overallEl) overallEl.textContent = "";
+    if (verdictEl) verdictEl.textContent = "";
+    if (summaryEl) summaryEl.textContent = "";
+    if (violationsEl) violationsEl.innerHTML = "";
+  });
 }
 
 document.querySelectorAll(".approve-btn, [data-requires-spotcheck]").forEach((btn) => setBtnLocked(btn, true));
@@ -375,6 +389,7 @@ document.querySelectorAll(".evaluate-btn").forEach((btn) => {
     const overallEl = document.querySelector(`[data-eval-overall="${key}"]`);
     const verdictEl = document.querySelector(`[data-eval-verdict="${key}"]`);
     const summaryEl = document.querySelector(`[data-eval-summary="${key}"]`);
+    const violationsEl = document.querySelector(`[data-eval-violations="${key}"]`);
 
     const content = key === "twitter_thread" ? threadTextToArray(textarea.value) : textarea.value;
     if (!content || (Array.isArray(content) && !content.length)) {
@@ -399,7 +414,7 @@ document.querySelectorAll(".evaluate-btn").forEach((btn) => {
       const payload = await res.json();
       if (!res.ok || !payload.ok) throw new Error(payload.error || "Gagal mengevaluasi konten.");
 
-      const { criteria, overall_score, verdict, summary } = payload.data;
+      const { criteria, overall_score, verdict, summary, unfilled_placeholders, overpromise_violations, screaming_text_violations } = payload.data;
 
       criteriaEl.innerHTML = (criteria || [])
         .map(
@@ -418,6 +433,22 @@ document.querySelectorAll(".evaluate-btn").forEach((btn) => {
       verdictEl.textContent = isApproved ? "✔ APPROVED" : "✎ NEEDS REVISION";
       verdictEl.className = isApproved ? "text-emerald-400 font-bold" : "text-rose-400 font-bold";
       summaryEl.textContent = summary || "";
+
+      if (violationsEl) {
+        const groups = [
+          { label: "Placeholder belum diisi", items: unfilled_placeholders },
+          { label: "Klaim overpromise", items: overpromise_violations },
+          { label: "SCREAMING TEXT", items: screaming_text_violations },
+        ].filter((g) => g.items && g.items.length);
+
+        violationsEl.innerHTML = groups
+          .map(
+            (g) => `
+          <p class="text-rose-400"><span class="font-bold">${escapeHtml(g.label)}:</span> ${g.items.map((v) => `"${escapeHtml(v)}"`).join(", ")}</p>
+        `
+          )
+          .join("");
+      }
 
       const spotCheckbox = document.querySelector(`[data-spotcheck="${key}"]`);
       if (spotCheckbox) {
